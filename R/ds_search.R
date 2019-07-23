@@ -16,6 +16,7 @@
 #' or sort by a function (e.g., sum(x_f, y_f) desc, which sorts by the sum of
 #' x_f and y_f in a descending order). (optional)
 #' @template args
+#' @template key
 #' @details From the help for this method "The datastore_search action allows you to search data
 #' in a resource. DataStore resources that belong to private CKAN resource can only be
 #' read by you if you have access to the CKAN resource and send the appropriate authorization."
@@ -25,24 +26,29 @@
 #' full text search query language:
 #' \url{http://www.postgresql.org/docs/9.1/static/datatype-textsearch.html#DATATYPE-TSQUERY}.
 #' @examples \dontrun{
-#' url <- 'http://demo.ckan.org/'
-#' ds_search(resource_id = 'f4129802-22aa-4437-b9f9-8a8f3b7b2a53', url = url)
-#' ds_search(resource_id = 'f4129802-22aa-4437-b9f9-8a8f3b7b2a53', url = url, as = "table")
-#' ds_search(resource_id = 'f4129802-22aa-4437-b9f9-8a8f3b7b2a53', url = url, as = "json")
+#' ckanr_setup(url = 'https://data.nhm.ac.uk/')
+#' 
+#' ds_search(resource_id = '8f0784a6-82dd-44e7-b105-6194e046eb8d')
+#' ds_search(resource_id = '8f0784a6-82dd-44e7-b105-6194e046eb8d',
+#'   as = "table")
+#' ds_search(resource_id = '8f0784a6-82dd-44e7-b105-6194e046eb8d',
+#'   as = "json")
 #'
-#' ds_search(resource_id = 'f4129802-22aa-4437-b9f9-8a8f3b7b2a53', url = url, limit = 1, as = "table")
-#' ds_search(resource_id = 'f4129802-22aa-4437-b9f9-8a8f3b7b2a53', url = url, q = "a*")
+#' ds_search(resource_id = '8f0784a6-82dd-44e7-b105-6194e046eb8d', limit = 1,
+#'   as = "table")
+#' ds_search(resource_id = '8f0784a6-82dd-44e7-b105-6194e046eb8d', q = "a*")
 #' }
 
-ds_search <- function(resource_id = NULL, filters = NULL, q = NULL, plain = NULL,
-                      language = NULL, fields = NULL, offset = NULL,
-                      limit = NULL, sort = NULL,
-                      url = get_default_url(), as = 'list', ...) {
+ds_search <- function(resource_id = NULL, filters = NULL, q = NULL,
+  plain = NULL, language = NULL, fields = NULL, offset = NULL,
+  limit = NULL, sort = NULL, url = get_default_url(), key = get_default_key(),
+  as = 'list', ...) {
+
   args <- cc(list(resource_id = resource_id, filters = filters,q = q,
                   plain = plain, language = language, fields = fields,
                   offset = offset, limit = limit, sort = sort))
-  res <- POST(file.path(url, '/api/action/datastore_search'), ctj(),
-              query = args, ...)
-  res <- content(res, "text")
+  res <- POST(file.path(notrail(url), 'api/action/datastore_search'), ctj(),
+              query = args, add_headers(Authorization = key), ...)
+  res <- content(res, "text", encoding = "UTF-8")
   switch(as, json = res, list = jsl(res), table = jsd(res))
 }

@@ -10,9 +10,10 @@
 #' @param include_num_followers (logical) Include the number of followers the user
 #' has (optional, default:False)
 #' @template args
+#' @template key
 #' @examples \dontrun{
 #' # Setup
-#' ckanr_setup(url = "http://demo.ckan.org/", key = getOption("ckan_demo_key"))
+#' ckanr_setup(url = "https://demo.ckan.org/", key = getOption("ckan_demo_key"))
 #'
 #' # show user
 #' user_show('sckottie')
@@ -24,13 +25,12 @@
 #' user_show('sckottie', include_num_followers = TRUE)
 #' }
 user_show <- function(id, user_obj = NULL, include_datasets = FALSE,
-  include_num_followers = FALSE, url = get_default_url(), as = 'list', ...) {
+  include_num_followers = FALSE, url = get_default_url(),
+  key = get_default_key(), as = 'list', ...) {
 
   id <- as.ckan_user(id, url = url)
-  body <- cc(list(id = id$id, user_obj = user_obj, include_datasets = include_datasets,
+  args <- cc(list(id = id$id, user_obj = user_obj, include_datasets = include_datasets,
                   include_num_followers = include_num_followers))
-  res <- ckan_POST(url, 'user_show',
-                   body = tojun(body, TRUE), key = NULL,
-                   encode = "json", ctj(), ...)
+  res <- ckan_GET(url, 'user_show', args, key = key, ...)
   switch(as, json = res, list = as_ck(jsl(res), "ckan_user"), table = jsd(res))
 }

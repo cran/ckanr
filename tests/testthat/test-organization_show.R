@@ -1,12 +1,20 @@
 context("organization_show")
+
+skip_on_cran()
+
 u <- get_test_url()
 o <- get_test_oid()
 
 dataset_num <- local({
   check_ckan(u)
-  check_organization(u, o)
-
-  res <- httr::GET(file.path(u, "organization", o))
+  chorg <- tryCatch(check_organization(u, o), error = function(e) e)
+  if (inherits(chorg, "error")) {
+    ckanr_setup(u, key = getOption("ckan_demo_key"))
+    organization_create(o)
+  }
+  Sys.sleep(2)
+  org <- organization_show(o, url=u)
+  res <- httr::GET(file.path(u, "organization", org$name))
   httr::stop_for_status(res)
   html <- httr::content(res, as = "text")
   tmp <- regmatches(html, regexec("(\\d+) datasets? found", html))

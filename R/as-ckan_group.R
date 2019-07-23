@@ -4,7 +4,7 @@
 #' @param x Variety of things, character, list, or ckan_group class object
 #' @param ... Further args passed on to \code{\link{group_show}} if character given
 #' @examples \dontrun{
-#' ckanr_setup(url = "http://demo.ckan.org/", key = getOption("ckan_demo_key"))
+#' ckanr_setup(url = "https://demo.ckan.org/", key = getOption("ckan_demo_key"))
 #'
 #' (grps <- group_list())
 #' grps[[3]]
@@ -29,7 +29,7 @@ as.ckan_group.list <- function(x, ...) structure(x, class = "ckan_group")
 
 #' @export
 #' @rdname as.ckan_group
-is.ckan_group <- function(x) is(x, "ckan_group")
+is.ckan_group <- function(x) inherits(x, "ckan_group")
 
 #' @export
 print.ckan_group <- function(x, ...) {
@@ -42,9 +42,7 @@ print.ckan_group <- function(x, ...) {
   cat("  Created: ", x$created, "\n", sep = "")
 }
 
-get_group <- function(id, url = get_default_url(), ...) {
-  res <- ckan_POST(url = url, method = 'group_show', key = NULL,
-                   body = tojun(list(id = id), TRUE),
-                   encode = "json", ctj(), ...)
+get_group <- function(id, url = get_default_url(), key = get_default_key(), ...) {
+  res <- ckan_GET(url, 'group_show', list(id = id), key = key, ...)
   as_ck(jsl(res), "ckan_group")
 }

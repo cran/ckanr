@@ -62,12 +62,13 @@
 #' using this package. That is, not necessarily landing pages of each instance,
 #' although, the URL may be the landing page and the base API URL.
 #'
-#' @importFrom methods is
+#' @importFrom methods new
 #' @importFrom stats na.omit
 #' @importFrom utils read.csv unzip
 #' @importFrom httr GET POST upload_file write_disk add_headers content
 #' stop_for_status http_condition content_type_json
 #' @importFrom jsonlite fromJSON
+#' @import DBI
 #' @name ckanr-package
 #' @aliases ckanr
 #' @docType package
@@ -76,4 +77,16 @@
 #' @author Wush Wu
 #' @author Imanuel Costigan \email{i.costigan@@me.com}
 #' @keywords package
+NULL
+
+#' Deprecated functions in \code{ckanr}
+#'
+#' These functions still work but will be removed (defunct) in the next version.
+#'
+#' \itemize{
+#'  \item \code{\link{ds_create_dataset}}: The functionality of this function is already in
+#'  another function in this package. See function \code{\link{resource_create}}
+#' }
+#'
+#' @name ckanr-deprecated
 NULL

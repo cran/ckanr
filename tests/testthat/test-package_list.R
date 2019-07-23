@@ -1,4 +1,7 @@
 context("package_list")
+
+skip_on_cran()
+
 u <- get_test_url()
 
 package_num <- local({
@@ -13,7 +16,7 @@ test_that("package_list gives back expected class types", {
   check_ckan(u)
   a <- package_list(url=u, limit=30)
   expect_is(a, "list")
-  expect_less_than(length(a), 30 + 1)
+  expect_lt(length(a), 30 + 1)
   a <- package_list(url=u, limit=NULL)
   expect_is(a, "list")
   expect_equal(length(a), package_num)
@@ -26,7 +29,7 @@ test_that("package_list works giving back json output", {
   expect_is(b, "character")
   expect_is(b_df, "list")
   expect_is(b_df$result, "character")
-  expect_less_than(length(b_df$result), 30 + 1)
+  expect_lt(length(b_df$result), 30 + 1)
 
   b <- package_list(url=u, as = 'json', limit = NULL)
   b_df <- jsonlite::fromJSON(b)

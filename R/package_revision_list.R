@@ -3,9 +3,10 @@
 #' @export
 #' @param id (character) Package identifier.
 #' @template args
+#' @template key
 #' @examples \dontrun{
 #' # Setup
-#' ckanr_setup(url = "http://demo.ckan.org/", key = getOption("ckan_demo_key"))
+#' ckanr_setup(url = "https://demo.ckan.org/", key = getOption("ckan_demo_key"))
 #'
 #' # create a package
 #' (res <- package_create("dolphins"))
@@ -24,7 +25,10 @@
 #' package_revision_list(res$id, as = "table")
 #' package_revision_list(res$id, as = "json")
 #' }
-package_revision_list <- function(id, url = get_default_url(), as = "list", ...) {
-  res <- ckan_POST(url, 'package_revision_list', body = list(id = id), ...)
+package_revision_list <- function(id, url = get_default_url(),
+  key = get_default_key(), as = "list", ...) {
+
+  res <- ckan_GET(url, 'package_revision_list', list(id = id),
+    key = key, ...)
   switch(as, json = res, list = jsl(res), table = jsd(res))
 }

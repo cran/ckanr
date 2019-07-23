@@ -29,21 +29,22 @@
 #'
 #' @examples \dontrun{
 #' # Setup
-#' ckanr_setup(url = "http://demo.ckan.org/", key = getOption("ckan_demo_key"))
+#' ckanr_setup(url = "https://demo.ckan.org/", key = getOption("ckan_demo_key"))
 #'
 #' # create an organization
 #' (res <- organization_create("foobar", title = "Foo bars", description = "love foo bars"))
 #' res$name
 #' }
-organization_create <- function(name = NULL, id = NULL, title = NULL, description = NULL,
-  image_url = NULL, state = "active", approval_status = NULL, extras = NULL, packages = NULL,
-  users = NULL, key = get_default_key(), url = get_default_url(), as = 'list', ...) {
+organization_create <- function(name = NULL, id = NULL, title = NULL,
+  description = NULL, image_url = NULL, state = "active", approval_status = NULL,
+  extras = NULL, packages = NULL, users = NULL, url = get_default_url(),
+  key = get_default_key(), as = 'list', ...) {
 
   body <- cc(list(name = name, id = id, title = title, description = description,
-                  image_url = image_url, state = state, approval_status = approval_status,
-                  extras = extras, packages = packages, users = users))
-  res <- ckan_POST(url, 'organization_create',
-                   body = tojun(body, TRUE), key = key,
-                   encode = "json", ctj(), ...)
-  switch(as, json = res, list = as_ck(jsl(res), "ckan_organization"), table = jsd(res))
+    image_url = image_url, state = state, approval_status = approval_status,
+    extras = extras, packages = packages, users = users))
+  res <- ckan_POST(url, 'organization_create', body = tojun(body, TRUE),
+    key = key, encode = "json", ctj(), ...)
+  switch(as, json = res, list = as_ck(jsl(res), "ckan_organization"),
+    table = jsd(res))
 }

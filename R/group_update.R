@@ -1,4 +1,4 @@
-#' @title Update a group
+#' Update a group
 #'
 #' @export
 #' @param x (list) A list with key-value pairs
@@ -7,7 +7,7 @@
 #' @template key
 #' @examples \dontrun{
 #' # Setup
-#' ckanr_setup(url = "http://demo.ckan.org/", key = getOption("ckan_demo_key"))
+#' ckanr_setup(url = "https://demo.ckan.org/", key = getOption("ckan_demo_key"))
 #'
 #' # First, create a group
 #' grp <- group_create("water-bears2")
@@ -21,7 +21,8 @@
 #' group_update(x, id = grp)
 #' }
 group_update <- function(x, id, url = get_default_url(), key = get_default_key(),
-                           as = 'list', ...) {
+  as = 'list', ...) {
+  
   id <- as.ckan_group(id, url = url)
   if (class(x) != "list") {
     stop("x must be of class list", call. = FALSE)

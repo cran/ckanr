@@ -4,12 +4,13 @@
 #' @param id (character) Package identifier.
 #' @template paging
 #' @template args
+#' @template key
 #' @examples \dontrun{
 #' # Setup
-#' ckanr_setup(url = "http://demo.ckan.org/", key = getOption("ckan_demo_key"))
+#' ckanr_setup(url = "https://demo.ckan.org/", key = getOption("ckan_demo_key"))
 #'
 #' # create a package
-#' (res <- package_create("owls6"))
+#' (res <- package_create("owls64"))
 #'
 #' # list package activity
 #' package_activity_list(res$id)
@@ -26,9 +27,10 @@
 #' package_activity_list(res$id, as = "json")
 #' }
 package_activity_list <- function(id, offset = 0, limit = 31,
-                                  url = get_default_url(), as = "list", ...) {
+  url = get_default_url(), key = get_default_key(), as = "list", ...) {
+
   id <- as.ckan_package(id, url = url)
-  body <- cc(list(id = id$id, offset = offset, limit = limit))
-  res <- ckan_POST(url, 'package_activity_list', body = body, ...)
+  args <- cc(list(id = id$id, offset = offset, limit = limit))
+  res <- ckan_GET(url, 'package_activity_list', args, key = key, ...)
   switch(as, json = res, list = jsl(res), table = jsd(res))
 }

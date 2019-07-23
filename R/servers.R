@@ -8,7 +8,6 @@
 #' I can't figure out how to get access to the CKAN API on their instance.
 #' @examples \dontrun{
 #' servers()
-#' ckan_info("http://data.gov.au/")
 #' ckan_info(servers()[5])
 #'
 #' # what version is each CKAN server running
@@ -130,7 +129,7 @@ server_urls <- c(
   "https://catalogodatos.gub.uy",
   "https://data.barrowbc.gov.uk",
   "https://data.glasgow.gov.uk",
-  "https://data.hdx.rwlabs.org",
+  "https://data.humdata.org",
   "https://data.qld.gov.au",
   "https://data.sa.gov.au",
   "https://datahub.cmap.illinois.gov",
@@ -141,5 +140,6 @@ server_urls <- c(
   "http://opendata.opennorth.se/",
   "https://data.noaa.gov",
   "https://data.overheid.nl/data",
-  "https://www.data.gv.at/katalog"
+  "https://www.data.gv.at/katalog",
+  "https://data.nal.usda.gov"
 )

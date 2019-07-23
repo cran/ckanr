@@ -9,7 +9,7 @@
 #' @template key
 #' @examples \dontrun{
 #' # Setup
-#' ckanr_setup(url = "http://demo.ckan.org/", key = getOption("ckan_demo_key"))
+#' ckanr_setup(url = "https://demo.ckan.org/", key = Sys.getenv("CKAN_DEMO_KEY"))
 #'
 #' # create a package
 #' (res <- package_create("yellow9"))
@@ -26,8 +26,11 @@
 #' # delete the resource
 #' resource_delete(xx)
 #' }
-resource_delete <- function(id, key = get_default_key(), url = get_default_url(), ...) {
+resource_delete <- function(id, url = get_default_url(), key = get_default_key(),
+  ...) {
+  
   id <- as.ckan_resource(id, url = url)
-  tmp <- ckan_POST(url, 'resource_delete', body = list(id = id$id), key = key, ...)
+  tmp <- ckan_POST(url, 'resource_delete', body = list(id = id$id), key = key,
+    ...)
   jsonlite::fromJSON(tmp)$success
 }

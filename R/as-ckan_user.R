@@ -4,17 +4,17 @@
 #' @param x Variety of things, character, list, or ckan_user class object
 #' @param ... Further args passed on to \code{\link{user_show}} if character given
 #' @examples \dontrun{
-#' ckanr_setup(url = "http://demo.ckan.org/", key = getOption("ckan_demo_key"))
+#' ckanr_setup(url = "https://demo.ckan.org/", key = getOption("ckan_demo_key"))
 #'
 #' (usrs <- user_list())
-#' usrs$results
-#' usrs$results[[3]]
+#' usrs[1:3]
+#' usrs[[3]]
 #'
 #' # create item class from only an item ID
-#' as.ckan_user(usrs$results[[3]]$id)
+#' as.ckan_user(usrs[[3]]$id)
 #'
 #' # gives back itself
-#' (x <- as.ckan_user(usrs$results[[3]]$id))
+#' (x <- as.ckan_user(usrs[[3]]$id))
 #' as.ckan_user(x)
 #' }
 as.ckan_user <- function(x, ...) UseMethod("as.ckan_user")
@@ -30,7 +30,7 @@ as.ckan_user.list <- function(x, ...) structure(x, class = "ckan_user")
 
 #' @export
 #' @rdname as.ckan_user
-is.ckan_user <- function(x) is(x, "ckan_user")
+is.ckan_user <- function(x) inherits(x, "ckan_user")
 
 #' @export
 print.ckan_user <- function(x, ...) {
@@ -43,9 +43,7 @@ print.ckan_user <- function(x, ...) {
   cat("  Created: ", x$created, "\n", sep = "")
 }
 
-get_user <- function(id, url = get_default_url(), ...) {
-  res <- ckan_POST(url = url, method = 'user_show', key = NULL,
-                   body = tojun(list(id = id), TRUE),
-                   encode = "json", ctj(), ...)
+get_user <- function(id, url = get_default_url(), key = get_default_key(), ...) {
+  res <- ckan_GET(url, 'user_show', list(id = id), key = key, ...)
   as_ck(jsl(res), "ckan_user")
 }

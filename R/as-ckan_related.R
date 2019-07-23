@@ -4,7 +4,7 @@
 #' @param x Variety of things, character, list, or ckan_related class object
 #' @param ... Further args passed on to \code{\link{related_show}} if character given
 #' @examples \dontrun{
-#' ckanr_setup(url = "http://demo.ckan.org/", key = getOption("ckan_demo_key"))
+#' ckanr_setup(url = "https://demo.ckan.org/", key = getOption("ckan_demo_key"))
 #'
 #' (x <- package_create("foobbbbbarrrr") %>%
 #'    related_create(title = "my resource",
@@ -30,7 +30,7 @@ as.ckan_related.list <- function(x, ...) structure(x, class = "ckan_related")
 
 #' @export
 #' @rdname as.ckan_related
-is.ckan_related <- function(x) is(x, "ckan_related")
+is.ckan_related <- function(x) inherits(x, "ckan_related")
 
 #' @export
 print.ckan_related <- function(x, ...) {
@@ -42,9 +42,7 @@ print.ckan_related <- function(x, ...) {
   cat("  Creator: ", x$created, "\n", sep = "")
 }
 
-get_related <- function(id, url = get_default_url(), ...) {
-  res <- ckan_POST(url = url, method = 'related_show', key = NULL,
-                   body = tojun(list(id = id), TRUE),
-                   encode = "json", ctj(), ...)
+get_related <- function(id, url = get_default_url(), key = get_default_key(), ...) {
+  res <- ckan_GET(url, 'related_show', list(id = id), key = key, ...)
   as_ck(jsl(res), "ckan_related")
 }

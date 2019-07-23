@@ -35,7 +35,7 @@
 #'
 #' @examples \dontrun{
 #' # Setup
-#' ckanr_setup(url = "http://demo.ckan.org", key = getOption("ckan_demo_key"))
+#' ckanr_setup(url = "https://demo.ckan.org", key = getOption("ckan_demo_key"))
 #'
 #' # create a group
 #' (res <- group_create("fruitloops2", description="A group about fruitloops"))
@@ -45,7 +45,7 @@
 group_create <- function(name = NULL, id = NULL, title = NULL, description = NULL,
   image_url = NULL, type = NULL, state = "active", approval_status = NULL, extras = NULL,
   packages = NULL, groups = NULL, users = NULL,
-  key = get_default_key(), url = get_default_url(), as = 'list', ...) {
+  url = get_default_url(), key = get_default_key(), as = 'list', ...) {
 
   body <- cc(list(name = name, id = id, title = title, description = description,
                   image_url = image_url, type = type, state = state,

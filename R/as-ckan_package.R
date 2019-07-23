@@ -4,7 +4,7 @@
 #' @param x Variety of things, character, list, or ckan_package class object
 #' @param ... Further args passed on to \code{\link{package_show}} if character given
 #' @examples \dontrun{
-#' ckanr_setup(url = "http://demo.ckan.org/", key = getOption("ckan_demo_key"))
+#' ckanr_setup(url = "https://demo.ckan.org/", key = getOption("ckan_demo_key"))
 #'
 #' (pkgs <- package_search())
 #' pkgs$results
@@ -30,7 +30,7 @@ as.ckan_package.list <- function(x, ...) structure(x, class = "ckan_package")
 
 #' @export
 #' @rdname as.ckan_package
-is.ckan_package <- function(x) is(x, "ckan_package")
+is.ckan_package <- function(x) inherits(x, "ckan_package")
 
 #' @export
 print.ckan_package <- function(x, ...) {
@@ -51,9 +51,7 @@ sift_res <- function(z) {
   }
 }
 
-get_package <- function(id, url = get_default_url(), ...) {
-  res <- ckan_POST(url = url, method = 'package_show', key = NULL,
-                   body = tojun(list(id = id), TRUE),
-                   encode = "json", ctj(), ...)
+get_package <- function(id, url = get_default_url(), key = get_default_key(), ...) {
+  res <- ckan_GET(url, 'package_show', list(id = id), key, ...)
   as_ck(jsl(res), "ckan_package")
 }

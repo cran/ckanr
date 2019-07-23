@@ -21,13 +21,13 @@
 #' @references
 #' \url{http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.create.resource_create}
 #' @examples \dontrun{
-#' ckanr_setup(url = "http://demo.ckan.org/", key = getOption("ckan_demo_key"))
+#' ckanr_setup(url = "https://demo.ckan.org/", key = getOption("ckan_demo_key"))
 #'
 #' # Get file
 #' path <- system.file("examples", "actinidiaceae.csv", package = "ckanr")
 #'
 #' # Create package, then a resource within that package
-#' (res <- package_create("newpackage3"))
+#' (res <- package_create("newpackage10"))
 #' (xx <- resource_create(package_id = res$id,
 #'                        description = "my resource",
 #'                        name = "bears",
@@ -70,12 +70,61 @@
 #'                                    package = "ckanr"),
 #'                 key = get_test_key(),
 #'                 url = get_test_url())
+#'
+#' # other file formats
+#' ## html
+#' path <- system.file("examples", "mapbox.html", package = "ckanr")
+#'
+#' # Create package, then a resource within that package
+#' (res <- package_create("mappkg"))
+#' (xx <- resource_create(package_id = res$id,
+#'                        description = "a map, yay",
+#'                        name = "mapyay",
+#'                        upload = path,
+#'                        rcurl = "http://google.com"
+#' ))
+#' browseURL(xx$url)
+#'
+#' # Modify dataset, here lowercase strings in one column
+#' dat <- readLines(path)
+#' dat <- sub("-111.06", "-115.06", dat)
+#' newpath <- tempfile(fileext = ".html")
+#' cat(dat, file = newpath, sep = "\n")
+#'
+#' # Upload modified dataset
+#' ## Directly from output of resource_create
+#' (xxx <- resource_update(xx, path=newpath))
+#' browseURL(xxx$url)
 #' }
-resource_update <- function(id, path, key = get_default_key(),
-                            url = get_default_url(), as = 'list', ...) {
+resource_update <- function(id, path, url = get_default_url(),
+  key = get_default_key(), as = 'list', ...) {
+
   id <- as.ckan_resource(id, url = url)
   path <- path.expand(path)
-  body <- list(id = id$id, upload = upload_file(path), last_modified = Sys.time(), url = "update")
+  up <- upload_file(path)
+  format <- pick_type(up$type)
+  body <- list(id = id$id, format = format, upload = up,
+    last_modified =
+      format(Sys.time(), tz = "UTC", format = "%Y-%m-%d %H:%M:%OS6"),
+    url = "update")
   res <- ckan_POST(url, 'resource_update', body = body, key = key, ...)
-  switch(as, json = res, list = as_ck(jsl(res), "ckan_resource"), table = jsd(res))
+  switch(as, json = res, list = as_ck(jsl(res), "ckan_resource"),
+         table = jsd(res))
+}
+
+pick_type <- function(x) {
+  switch(x,
+         `text/html` = "html",
+         `text/csv` = "csv",
+         `text/plain` = "txt",
+         `application/vnd.openxmlformats-officedocument.wordprocessingml.document` = "docx",
+         `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet` = "xlsx",
+         `application/vnd.ms-excel.sheet.macroEnabled.12` = "xlsm",
+         `application/json` = "json",
+         `application/vnd.geo+json` = "geojson",
+         `application/pdf` = "pdf",
+         `image/jpeg` = "jpeg",
+         `image/png` = "png",
+         `image/bmp` = "bmp"
+         )
 }

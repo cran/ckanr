@@ -17,56 +17,85 @@ ckan_DELETE <- function(url, method, body = NULL, key = NULL, ...){
 
 ckan_VERB <- function(verb, url, method, body, key, ...) {
   VERB <- getExportedValue("httr", verb)
-  url <- sub("/$", "", url)
+  url <- notrail(url)
+  # check if proxy set
+  proxy <- get("ckanr_proxy", ckanr_settings_env)
+  if (!is.null(proxy)) {
+    if (!inherits(proxy, "request")) {
+      stop("proxy must be of class 'request', see ?ckanr_setup")
+    }
+  } else {
+    proxy <- httr::config()
+  }
   if (is.null(key)) {
     # no authentication
     if (is.null(body) || length(body) == 0) {
-      res <- VERB(file.path(url, ck(), method), ctj(), ...)
+      res <- VERB(file.path(url, ck(), method), ctj(), proxy, ...)
+      # res <- VERB(file.path(url, ck(), method), ctj(), config = httr::config(proxy, ...))
     } else {
-      res <- VERB(file.path(url, ck(), method), body = body, ...)
+      res <- VERB(file.path(url, ck(), method), body = body, proxy, ...)
+      # res <- VERB(file.path(url, ck(), method), body = body, config = httr::config(proxy, ...))
     }
   } else {
     # authentication
     api_key_header <- add_headers("X-CKAN-API-Key" = key)
     if (is.null(body) || length(body) == 0) {
-      res <- VERB(file.path(url, ck(), method), ctj(), api_key_header, ...)
+      res <- VERB(file.path(url, ck(), method), ctj(),
+        api_key_header, proxy, ...)
+        # api_key_header, config = httr::config(proxy, ...))
     } else {
-      res <- VERB(file.path(url, ck(), method), body = body, api_key_header, ...)
+      res <- VERB(file.path(url, ck(), method), body = body,
+        api_key_header, proxy, ...)
+        # api_key_header, config = httr::config(proxy, ...))
     }
   }
   err_handler(res)
-  content(res, "text")
+  content(res, "text", encoding = "UTF-8")
 }
 
 # GET fxn for fetch()
-fetch_GET <- function(x, store, path, args = NULL, ...) {
+fetch_GET <- function(x, store, path, args = NULL, format = NULL, ...) {
+  # check if proxy set
+  proxy <- get("ckanr_proxy", ckanr_settings_env)
+  if (!is.null(proxy)) {
+    if (!inherits(proxy, "request")) {
+      stop("proxy must be of class 'request', see ?ckanr_setup")
+    }
+  }
+  # set file format
+  file_fmt <- file_fmt(x)
+  fmt <- ifelse(identical(file_fmt, character(0)), format, file_fmt)
+  fmt <- tolower(fmt)
   if (store == "session") {
-    if (file_fmt(x) == "xls") {
-      fmt <- file_fmt(x)
+    if (fmt %in% c("xls", "xlsx", "geojson")) {
       dat <- NULL
-      path <- paste0(path, ".xls")
-      res <- GET(x, query = args, write_disk(path, TRUE), ...)
+      path <- tempfile(fileext = paste0(".", fmt))
+      res <- GET(x, query = args, write_disk(path, TRUE), config = proxy, ...)
       path <- res$request$output$path
-    } else if (file_fmt(x) %in% c("shp", "zip")) {
+      temp_files <- path
+    } else if (fmt %in% c("shp", "zip")) {
       fmt <- "shp"
       dat <- NULL
-      path <- paste0(path, ".zip")
-      res <- GET(x, query = args, write_disk(path, TRUE), ...)
+      path <- tempfile(fileext = ".zip")
+      res <- GET(x, query = args, write_disk(path, TRUE), config = proxy, ...)
       dir <- tempdir()
+      zip_files <- unzip(path, list = TRUE)
+      zip_files <- paste0(dir, "/", zip_files[["Name"]])
       unzip(path, exdir = dir)
+      temp_files <- c(path, zip_files)
       path <- list.files(dir, pattern = ".shp$", full.names = TRUE)
     } else {
-      fmt <- file_fmt(x)
       path <- NULL
-      res <- GET(x, query = args, ...)
+      temp_files <- NULL
+      res <- GET(x, query = args, config = proxy, ...)
       err_handler(res)
-      dat <- content(res, "text")
+      dat <- content(res, "text", encoding = "UTF-8")
     }
-    list(store = store, fmt = fmt, data = dat, path = path)
+    list(store = store, fmt = fmt, data = dat, path = path, temp_files = temp_files)
   } else {
     # if (!file.exists(path)) stop("path does not exist", call. = FALSE)
-    res <- GET(x, query = args, write_disk(path, TRUE), ...)
-    list(store = store, fmt = file_fmt(x), data = NULL, path = res$request$output$path)
+    res <- GET(x, query = args, write_disk(path, TRUE), config = proxy, ...)
+    list(store = store, fmt = fmt, data = NULL, path = res$request$output$path)
   }
 }
 
@@ -93,7 +122,7 @@ as_ck <- function(x, class) {
 err_handler <- function(x) {
   if (x$status_code > 201) {
     obj <- try({
-      err <- content(x)$error
+      err <- jsonlite::fromJSON(content(x, "text", encoding = "UTF-8"))$error
       tmp <- err[names(err) != "__type"]
       errmsg <- paste(names(tmp), unlist(tmp[[1]]))
       list(err = err, errmsg = errmsg)
@@ -103,11 +132,12 @@ err_handler <- function(x) {
                    x$status_code,
                    obj$err$`__type`,
                    obj$errmsg),
+                   #obj$err$message),
            call. = FALSE)
     } else {
       obj <- {
         err <- http_condition(x, "error")
-        errmsg <- content(x, "text")
+        errmsg <- content(x, "text", encoding = "UTF-8")
         list(err = err, errmsg = errmsg)
       }
       stop(sprintf("%s - %s\n  %s",
@@ -147,4 +177,8 @@ check4X <- function(x) {
   if (!requireNamespace(x, quietly = TRUE)) {
     stop("Please install ", x, call. = FALSE)
   }
+}
+
+notrail <- function(x) {
+  gsub("/+$", "", x)
 }

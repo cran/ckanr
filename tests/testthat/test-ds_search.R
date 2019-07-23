@@ -1,6 +1,17 @@
 context("ds_search")
-u <- get_test_url()
-r <- get_test_rid()
+
+skip_on_cran()
+
+# u <- get_test_url()
+u <- "http://data.nhm.ac.uk/"
+# r <- get_test_rid()
+r <- "8f0784a6-82dd-44e7-b105-6194e046eb8d"
+
+if (r == "") {
+  did <- package_list(limit = 1, url = u)[[1]]
+  pkg <- package_show(did, url = u)
+  r <- pkg$resources[[1]]$id
+}
 
 test_that("ds_search gives back expected class types", {
   check_ckan(u)

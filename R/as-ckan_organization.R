@@ -4,7 +4,7 @@
 #' @param x Variety of things, character, list, or ckan_organization class object
 #' @param ... Further args passed on to \code{\link{organization_show}} if character given
 #' @examples \dontrun{
-#' ckanr_setup(url = "http://demo.ckan.org/", key = getOption("ckan_demo_key"))
+#' ckanr_setup(url = "https://demo.ckan.org/", key = getOption("ckan_demo_key"))
 #'
 #' (orgs <- organization_list())
 #' orgs[[3]]
@@ -29,7 +29,7 @@ as.ckan_organization.list <- function(x, ...) structure(x, class = "ckan_organiz
 
 #' @export
 #' @rdname as.ckan_organization
-is.ckan_organization <- function(x) is(x, "ckan_organization")
+is.ckan_organization <- function(x) inherits(x, "ckan_organization")
 
 #' @export
 print.ckan_organization <- function(x, ...) {
@@ -40,9 +40,7 @@ print.ckan_organization <- function(x, ...) {
   cat("  No. Users: ", length(x$users), "\n", sep = "")
 }
 
-get_organization <- function(id, url = get_default_url(), ...) {
-  res <- ckan_POST(url = url, method = 'organization_show', key = NULL,
-                   body = tojun(list(id = id), TRUE),
-                   encode = "json", ctj(), ...)
+get_organization <- function(id, url = get_default_url(), key = get_default_key(), ...) {
+  res <- ckan_GET(url, 'organization_show', list(id = id), key = key, ...)
   as_ck(jsl(res), "ckan_organization")
 }

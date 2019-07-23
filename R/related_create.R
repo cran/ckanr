@@ -17,7 +17,7 @@
 #'
 #' @examples \dontrun{
 #' # Setup
-#' ckanr_setup(url = "http://demo.ckan.org/", key = getOption("ckan_demo_key"))
+#' ckanr_setup(url = "https://demo.ckan.org/", key = getOption("ckan_demo_key"))
 #'
 #' # create a package
 #' (res <- package_create("hello-mars"))
@@ -32,7 +32,7 @@
 #' }
 related_create <- function(id, title, type, description = NULL,
   related_id = NULL, related_url = NULL, image_url = NULL,
-  key = get_default_key(), url = get_default_url(), as = 'list', ...) {
+  url = get_default_url(), key = get_default_key(), as = 'list', ...) {
 
   id <- as.ckan_package(id, url = url)
   body <- cc(list(dataset_id = id$id, title = title,

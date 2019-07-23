@@ -4,7 +4,7 @@
 #' @param x Variety of things, character, list, or ckan_tag class object
 #' @param ... Further args passed on to \code{\link{tag_show}} if character given
 #' @examples \dontrun{
-#' ckanr_setup(url = "http://demo.ckan.org/", key = getOption("ckan_demo_key"))
+#' ckanr_setup(url = "https://demo.ckan.org/", key = getOption("ckan_demo_key"))
 #'
 #' (tags <- tag_search(query = 'ta'))
 #' tags[[3]]
@@ -29,7 +29,7 @@ as.ckan_tag.list <- function(x, ...) structure(x, class = "ckan_tag")
 
 #' @export
 #' @rdname as.ckan_tag
-is.ckan_tag <- function(x) is(x, "ckan_tag")
+is.ckan_tag <- function(x) inherits(x, "ckan_tag")
 
 #' @export
 print.ckan_tag <- function(x, ...) {
@@ -41,9 +41,7 @@ print.ckan_tag <- function(x, ...) {
   cat("  Packages (up to 5): ", sift_res(x$packages), "\n", sep = "")
 }
 
-get_tag <- function(id, url = get_default_url(), ...) {
-  res <- ckan_POST(url = url, method = 'tag_show', key = NULL,
-                   body = tojun(list(id = id), TRUE),
-                   encode = "json", ctj(), ...)
+get_tag <- function(id, url = get_default_url(), key = get_default_key(), ...) {
+  res <- ckan_GET(url, 'tag_show', list(id = id), key = key, ...)
   as_ck(jsl(res), "ckan_tag")
 }
