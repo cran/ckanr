@@ -4,7 +4,7 @@ Title: Client for the Comprehensive Knowledge Archive Network ('CKAN')
 Description: Client for 'CKAN' API (<https://ckan.org/>). Includes interface
     to 'CKAN' 'APIs' for search, list, show for packages, organizations, and
     resources. In addition, provides an interface to the 'datastore' API.
-Version: 0.3.0
+Version: 0.4.0
 Authors@R: c(
     person("Scott", "Chamberlain",
     	role = c("aut", "cre"),
@@ -24,20 +24,21 @@ Authors@R: c(
   )
 License: MIT + file LICENSE
 LazyData: true
-URL: https://github.com/ropensci/ckanr
+URL: https://docs.ropensci.org/ckanr (website)
+        https://github.com/ropensci/ckanr (devel)
 BugReports: https://github.com/ropensci/ckanr/issues
 VignetteBuilder: knitr
 Encoding: UTF-8
 Depends: DBI (>= 0.3.1)
 Imports: methods, stats, utils, httr (>= 1.0.0), jsonlite (>= 0.9.17),
         dplyr (>= 0.7.0), dbplyr, magrittr
-Suggests: knitr, sf, readxl, testthat, xml2, lazyeval
+Suggests: knitr, rmarkdown, sf, readxl, testthat, xml2, lazyeval
 RoxygenNote: 6.1.1
 X-schema.org-keywords: database, open-data, ckan, api, data, dataset
 X-schema.org-applicationCategory: Data Access
 X-schema.org-isPartOf: "https://ropensci.org"
 NeedsCompilation: no
-Packaged: 2019-07-23 01:47:39 UTC; sckott
+Packaged: 2019-10-11 20:39:37 UTC; sckott
 Author: Scott Chamberlain [aut, cre] (<https://orcid.org/0000-0003-1444-9135>),
   Imanuel Costigan [aut],
   Wush Wu [aut] (<https://orcid.org/0000-0001-5180-0567>),
@@ -45,4 +46,4 @@ Author: Scott Chamberlain [aut, cre] (<https://orcid.org/0000-0003-1444-9135>),
   Sharla Gelfand [aut]
 Maintainer: Scott Chamberlain <myrmecocystus@gmail.com>
 Repository: CRAN
-Date/Publication: 2019-07-23 04:30:02 UTC
+Date/Publication: 2019-10-11 21:00:02 UTC

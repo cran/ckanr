@@ -7,6 +7,7 @@
 #' disk saves the file to disk.
 #' @param path if store=disk, you must give a path to store file to
 #' @param format Format of the file. Required if format is not detectable through file URL.
+#' @param key A CKAN API key (optional, character)
 #' @param ... Curl arguments passed on to \code{\link[httr]{GET}}
 #' @examples \dontrun{
 #' # CSV file
@@ -16,8 +17,8 @@
 #' ckan_fetch(res$url, "disk", "myfile.csv")
 #'
 #' # CSV file, format not available
-#' ckanr_setup("https://ckan0.cf.opendata.inter.sandbox-toronto.ca")
-#' res <- resource_show(id = "75c69a49-8573-4dda-b41a-d312a33b2e05", as = "table")
+#' ckanr_setup("https://ckan0.cf.opendata.inter.prod-toronto.ca")
+#' res <- resource_show(id = "c57c3e1c-20e2-470f-bc82-e39a0264be31", as = "table")
 #' res$url
 #' res$format
 #' head(ckan_fetch(res$url, format = res$format))
@@ -26,6 +27,13 @@
 #' ckanr_setup("http://datamx.io")
 #' res <- resource_show(id = "e883510e-a082-435c-872a-c5b915857ae1", as = "table")
 #' head(ckan_fetch(res$url))
+#'
+#' # Excel file, multiple sheets - requires readxl package
+#' ckanr_setup()
+#' res <- resource_show(id = "ce02a1cf-35f1-41df-91d9-11ed1fdd4186", as = "table")
+#' x <- ckan_fetch(res$url)
+#' names(x)
+#' head(x[["Mayor - Maire"]])
 #'
 #' # XML file - requires xml2 package
 #' ckanr_setup("http://data.ottawa.ca")
@@ -45,11 +53,11 @@
 #' head(ckan_fetch(res$url))
 #'
 #' # SHP file (spatial data, ESRI format) - requires sf package
-#' ckanr_setup("https://ckan0.cf.opendata.inter.sandbox-toronto.ca")
-#' res <- resource_show(id = "6cbb0aa3-a8d1-421c-9c40-14c6f05e0c73", as = "table")
+#' ckanr_setup("https://ckan0.cf.opendata.inter.prod-toronto.ca")
+#' res <- resource_show(id = "27362290-8bbf-434b-a9de-325a6c2ef923", as = "table")
 #' x <- ckan_fetch(res$url)
 #' class(x)
-#' plot(x)
+#' plot(x[, c("AREA_NAME", "geometry")])
 #'
 #' # GeoJSON file - requires sf package
 #' ckanr_setup("http://datamx.io")
@@ -58,8 +66,14 @@
 #' class(x)
 #' plot(x[, c("mun_name", "geometry")])
 #'
+#' # ZIP file - packages required depends on contents
+#' ckanr_setup("https://ckan0.cf.opendata.inter.prod-toronto.ca")
+#' res <- resource_show(id = "bb21e1b8-a466-41c6-8bc3-3c362cb1ed55", as = "table")
+#' x <- ckan_fetch(res$url)
+#' names(x)
+#' head(x[["ChickenpoxAgegroups2017.csv"]])
 #' }
-ckan_fetch <- function(x, store = "session", path = "file", format = NULL, ...) {
+ckan_fetch <- function(x, store = "session", path = "file", format = NULL, key = get_default_key(), ...) {
   store <- match.arg(store, c("session", "disk"))
   file_fmt <- file_fmt(x)
   if (identical(file_fmt, character(0)) & is.null(format)) {
@@ -67,9 +81,19 @@ ckan_fetch <- function(x, store = "session", path = "file", format = NULL, ...) 
   }
   fmt <- ifelse(identical(file_fmt, character(0)), format, file_fmt)
   fmt <- tolower(fmt)
-  res <- fetch_GET(x, store, path, format = fmt, ...)
+  res <- fetch_GET(x, store, path, format = fmt, key = key, ...)
   if (store == "session") {
-    temp_res <- read_session(res$fmt, res$data, res$path)
+    if (res$fmt == "zip") {
+      temp_res <- vector(mode = "list", length = length(res$path))
+      for (i in seq_along(res$path)) {
+        temp_res[[i]] <- read_session(file_fmt(res$path[[i]]), res$data, res$path[[i]])
+      }
+      temp_names <- res$path
+      temp_names <- basename(temp_names)
+      names(temp_res) <- temp_names
+    } else {
+      temp_res <- read_session(res$fmt, res$data, res$path)
+    }
     unlink(res$temp_files)
     temp_res
   } else {
@@ -79,14 +103,20 @@ ckan_fetch <- function(x, store = "session", path = "file", format = NULL, ...) 
 
 read_session <- function(fmt, dat, path) {
   switch(fmt,
-         csv = read.csv(text = dat),
+         csv = {
+           if (!is.null(dat)) {
+             read.csv(text = dat, stringsAsFactors = FALSE, fileEncoding = "latin1")
+           } else {
+             read.csv(path, stringsAsFactors = FALSE, fileEncoding = "latin1")
+           }
+         },
          xls = {
            check4X("readxl")
-           readxl::read_excel(path)
+           read_all_excel_sheets(path)
          },
          xlsx = {
            check4X("readxl")
-           readxl::read_excel(path)
+           read_all_excel_sheets(path)
          },
          xml = {
            check4X("xml2")
@@ -106,4 +136,15 @@ read_session <- function(fmt, dat, path) {
            sf::st_read(path)
          }
   )
+}
+
+read_all_excel_sheets <- function(x) {
+  sheets <- readxl::excel_sheets(x)
+  if (length(sheets) > 1) {
+    res <- lapply(sheets, readxl::read_excel, path = x)
+    names(res) <- sheets
+    res
+  } else {
+    readxl::read_excel(x)
+  }
 }

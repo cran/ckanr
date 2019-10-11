@@ -1,7 +1,7 @@
-c91cb7d615e96221205b92381e8e0c84 *DESCRIPTION
+b12c0c751b6c80bbc816a988a0e3d122 *DESCRIPTION
 de9532c5aeb8082a5fc9cbee02186d6f *LICENSE
 e948a929bcfb1049857db80bc2979a53 *NAMESPACE
-b2c0934e17026d26ce3fed3bd80f427f *NEWS.md
+a656af08900537ee1216f86851531a9d *NEWS.md
 c7b2e9c02b2b65a99a9fb872e93488d9 *R/as-ckan_group.R
 b76b603de0ce0949fb196dd50c3fd33d *R/as-ckan_organization.R
 c41039294dd0a9e92da640cd51502723 *R/as-ckan_package.R
@@ -11,8 +11,8 @@ c339aa02f39fe2508fa610c662617df2 *R/as-ckan_related.R
 fac1d09e9a78cd198b866732e72a42c7 *R/as-ckan_user.R
 bbda99b220c6716a819a39244062fe8d *R/changes.R
 677f0421a21ed166bf5974389de0c85c *R/ckan_classes.R
-91e1539964537638b46acc177a1d71f0 *R/ckan_fetch.R
-37a0c390a9e7a816fc73f389fb721869 *R/ckan_info.R
+ae8b920c7969a5932507e215fdc8507c *R/ckan_fetch.R
+7e95e6f87adfe1d96304b470226d3d9e *R/ckan_info.R
 e85610858240dcbaa1fcfb7f2972b62d *R/ckanr-package.R
 0c2299cc5a574fd7c66186df3db40c2b *R/ckanr_settings.R
 0ba77be6a8ff78baa61e3f7492881d4b *R/dashboard_activity_list.R
@@ -42,7 +42,7 @@ d66f2af8044e8d7676786fd3a8a02f99 *R/package_create.R
 71dcd74e3fcbe4936c56dbdebc8fab35 *R/package_list_current.R
 53af74345973eb4feed6015a3394c84a *R/package_patch.R
 006103a4347b3779f89118364240ce61 *R/package_revision_list.R
-c561f551caccd6dfabc2421f4cc72a7f *R/package_search.R
+d0f67ce28a8a57ae3e36d6c4755cfabe *R/package_search.R
 817ce9a80ec9e45de46e4d1d6595fa62 *R/package_show.R
 590dbd06f28d7e9f13a6d0e260729661 *R/package_update.R
 0df544dbf2bcf7d703b9f1eb9ada2a32 *R/ping.R
@@ -72,15 +72,14 @@ cc63a2486c7802c108f0f63aeb64abe3 *R/user_followee_count.R
 e282844b6aa2b8e95c2af236587eed72 *R/user_follower_list.R
 ce28956ebe7bed8718aa00c94437c96c *R/user_list.R
 d0d31aba443ac45dba48cb95778bd11f *R/user_show.R
-db02789a36b4d19ea5819314912c45be *R/zzz.R
-8da02e39bbfc0c2a80346dfe077defef *README.md
-bb2edc2e8b2f63575704c69032085637 *build/vignette.rds
-4a20417eb264cda7a952c3131a2af961 *inst/doc/ckanr.Rmd
-a16566c732757bf1a68895e6760b21aa *inst/doc/ckanr.html
+cbfe79dad2b80a12a4864b884f68f0c4 *R/zzz.R
+5933240dc8cf6cf95151d3b269be3b0e *README.md
+3677248e845891890ab3590f5377db8a *build/vignette.rds
+5e3235c88e6f3e3330455a5b2b34831a *inst/doc/ckanr.R
+bc1b3de46394408db82a66e129480884 *inst/doc/ckanr.Rmd
+f46f6f9695ab4c99d7c07e4a5f272657 *inst/doc/ckanr.html
 d1ea331f9011cbe41a653a57426c7f42 *inst/examples/actinidiaceae.csv
 631a5154439701acc544bdb6a068c1db *inst/examples/mapbox.html
-47efc43c136d04f8de50c17a27514f90 *inst/vign/ckanr.Rmd
-edb3eead295a9ed38dcf9245003755c7 *inst/vign/ckanr.md
 6329eb2c93dcb255a89a4df4a40b2e37 *man/as.ckan_group.Rd
 cb260039857569f8768df9681f9ba6cd *man/as.ckan_organization.Rd
 03ea2dcba74b82e7fc6087be4b858bcc *man/as.ckan_package.Rd
@@ -90,8 +89,8 @@ f6c0ec176ecf46b27dcb4c61dc66e649 *man/as.ckan_related.Rd
 7e38137803667bc089c189a6a1656c37 *man/as.ckan_user.Rd
 56bd223ad970d93363534a07e1dd6c73 *man/changes.Rd
 e30a1286eaed5b6ea6b9667fa081e949 *man/ckan_classes.Rd
-1e3e9dc993944826e98d432d27c2e749 *man/ckan_fetch.Rd
-5754e2f39006899ea37e80cbf02383d1 *man/ckan_info.Rd
+9e81513570457761be5b0b7d77bbf8d0 *man/ckan_fetch.Rd
+36197c9023521ecd4d7dab0c50456b9b *man/ckan_info.Rd
 25b5796460401266bd8ce111350295ed *man/ckanr-deprecated.Rd
 7e6be69c7cfd235725f02d719bc87cbb *man/ckanr-package.Rd
 42f822aaa00350f3191ddd3f3b0d6d9a *man/ckanr_settings.Rd
@@ -120,7 +119,7 @@ b7a8456b8f8adc4a8e75aa63c36c57d8 *man/organization_delete.Rd
 2ea32cdae91e1af6647d5412469a13ef *man/package_list_current.Rd
 22d04bbc7675b5102c58f6c963d913e0 *man/package_patch.Rd
 7bd7b66698354295574bbb548b7c545a *man/package_revision_list.Rd
-8556ca21aa79c5b086b2be461f0f98e0 *man/package_search.Rd
+245c38e376afa0ebc26cbbffab978a3c *man/package_search.Rd
 6e0d8e8efc6ce7a6195a0145b82a2fa0 *man/package_show.Rd
 fadf68a435825b8cb11906602b53f595 *man/package_update.Rd
 86556d3e6ced96b525d8c9f249453b2b *man/ping.Rd
@@ -154,6 +153,7 @@ ddd5b09b0e21261c5fa03594c1ffa2c1 *man/user_show.Rd
 459d6bbc9f8a54672a7ddc0a6b99bcd1 *tests/testthat/helper-ckanr.R
 1be0ff0d4e198d74294e044300f5ea7f *tests/testthat/test-changes.R
 cef1ad7813c520b555ba2ad92ed58f99 *tests/testthat/test-ckan_fetch.R
+462bcdbf4487ff8b0274540a4d849d43 *tests/testthat/test-ckan_info.R
 f903d5be909a78bc58afef39e8fd1ead *tests/testthat/test-ckanr_settings.R
 0ea7032d23a108903abb30f8d98910de *tests/testthat/test-dplyr.R
 24df0d767ed04bd67943e256955aff71 *tests/testthat/test-ds_create_dataset.R
@@ -179,4 +179,4 @@ d03515ffe2fb2919a102ec524c93e588 *tests/testthat/test-resource_update.R
 9686c07f34dd8fd62ebac930a670e4ab *tests/testthat/test-tag_search.R
 3191c8240281baeaaa94d47c1eea61d5 *tests/testthat/test-tag_show.R
 6b9170a4665d73e2acca42ccc252444d *tests/testthat/test-user_list.R
-4a20417eb264cda7a952c3131a2af961 *vignettes/ckanr.Rmd
+bc1b3de46394408db82a66e129480884 *vignettes/ckanr.Rmd

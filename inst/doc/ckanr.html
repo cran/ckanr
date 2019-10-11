@@ -1,515 +1,404 @@
 <!DOCTYPE html>
-<html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Scott Chamberlain" />
+
+<meta name="date" content="2019-10-11" />
 
 <title>ckanr vignette</title>
 
-<script type="text/javascript">
-window.onload = function() {
-  var imgs = document.getElementsByTagName('img'), i, img;
-  for (i = 0; i < imgs.length; i++) {
-    img = imgs[i];
-    // center an image if it is the only element of its parent
-    if (img.parentElement.childElementCount === 1)
-      img.parentElement.style.textAlign = 'center';
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
   }
-};
-</script>
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 
-<!-- Styles for R syntax highlighter -->
-<style type="text/css">
-   pre .operator,
-   pre .paren {
-     color: rgb(104, 118, 135)
-   }
-
-   pre .literal {
-     color: #990073
-   }
-
-   pre .number {
-     color: #099;
-   }
-
-   pre .comment {
-     color: #998;
-     font-style: italic
-   }
-
-   pre .keyword {
-     color: #900;
-     font-weight: bold
-   }
-
-   pre .identifier {
-     color: rgb(0, 0, 0);
-   }
-
-   pre .string {
-     color: #d14;
-   }
 </style>
-
-<!-- R syntax highlighter -->
-<script type="text/javascript">
-var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
-hljs.initHighlightingOnLoad();
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
 </script>
 
 
 
-<style type="text/css">
-body, td {
-   font-family: sans-serif;
-   background-color: white;
-   font-size: 13px;
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
 }
-
-body {
-  max-width: 800px;
-  margin: auto;
-  padding: 1em;
-  line-height: 20px;
+#header {
+text-align: center;
 }
-
-tt, code, pre {
-   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
 }
-
-h1 {
-   font-size:2.2em;
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
 }
-
-h2 {
-   font-size:1.8em;
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
 }
-
-h3 {
-   font-size:1.4em;
+#TOC ul ul {
+margin-left: -2em;
 }
-
-h4 {
-   font-size:1.0em;
+#TOC li {
+line-height: 16px;
 }
-
-h5 {
-   font-size:0.9em;
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
 }
-
-h6 {
-   font-size:0.8em;
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
 }
-
-a:visited {
-   color: rgb(50%, 0%, 50%);
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
 }
-
-pre, img {
-  max-width: 100%;
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
 }
 pre {
-  overflow-x: auto;
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
 }
-pre code {
-   display: block; padding: 0.5em;
+pre:not([class]) {
+background-color: #f7f7f7;
 }
-
 code {
-  font-size: 92%;
-  border: 1px solid #ccc;
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
 }
-
-code[class] {
-  background-color: #F8F8F8;
+p > code, li > code {
+padding: 2px 0px;
 }
-
-table, td, th {
-  border: none;
+div.figure {
+text-align: center;
 }
-
-blockquote {
-   color:#666666;
-   margin:0;
-   padding-left: 1em;
-   border-left: 0.5em #EEE solid;
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
 }
-
-hr {
-   height: 0px;
-   border-bottom: none;
-   border-top-width: thin;
-   border-top-style: dotted;
-   border-top-color: #999999;
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
 }
-
-@media print {
-   * {
-      background: transparent !important;
-      color: black !important;
-      filter:none !important;
-      -ms-filter: none !important;
-   }
-
-   body {
-      font-size:12pt;
-      max-width:100%;
-   }
-
-   a, a:visited {
-      text-decoration: underline;
-   }
-
-   hr {
-      visibility: hidden;
-      page-break-before: always;
-   }
-
-   pre, blockquote {
-      padding-right: 1em;
-      page-break-inside: avoid;
-   }
-
-   tr, img {
-      page-break-inside: avoid;
-   }
-
-   img {
-      max-width: 100% !important;
-   }
-
-   @page :left {
-      margin: 15mm 20mm 15mm 10mm;
-   }
-
-   @page :right {
-      margin: 15mm 10mm 15mm 20mm;
-   }
-
-   p, h2, h3 {
-      orphans: 3; widows: 3;
-   }
-
-   h2, h3 {
-      page-break-after: avoid;
-   }
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
 }
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
 </style>
+
 
 
 
 </head>
 
 <body>
-<!--
-%\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{ckanr vignette}
-%\VignetteEncoding{UTF-8}
--->
 
-<h1>ckanr vignette</h1>
 
+
+
+<h1 class="title toc-ignore">ckanr vignette</h1>
+<h4 class="author">Scott Chamberlain</h4>
+<h4 class="date">2019-10-11</h4>
+
+
+
+<div id="install" class="section level2">
 <h2>Install</h2>
-
 <p>Stable version from CRAN</p>
-
-<pre><code class="r">install.packages(&quot;ckanr&quot;)
-</code></pre>
-
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">&quot;ckanr&quot;</span>)</a></code></pre></div>
 <p>Development version from GitHub</p>
-
-<pre><code class="r">devtools::install_github(&quot;ropensci/ckanr&quot;)
-</code></pre>
-
-<pre><code class="r">library(&quot;ckanr&quot;)
-</code></pre>
-
-<p>Note: the default base CKAN URL is set to <a href="http://data.techno-science.ca/">http://data.techno-science.ca/</a>. You can change this using <code>ckanr_setup()</code>, or change the URL using the <code>url</code> 
-parameter in each function call.</p>
-
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">remotes<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;ropensci/ckanr&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">library</span>(<span class="st">&quot;ckanr&quot;</span>)</a></code></pre></div>
+<p>Note: the default base CKAN URL is set to <a href="http://data.techno-science.ca/">http://data.techno-science.ca/</a>. You can change this using <code>ckanr_setup()</code>, or change the URL using the <code>url</code> parameter in each function call.</p>
 <p>To set one or both, run:</p>
-
-<pre><code class="r"># restores default CKAN url to http://data.techno-science.ca/
-ckanr_setup() 
-# Just set url
-ckanr_setup(url = &quot;http://data.techno-science.ca/&quot;)
-# set url and key
-ckanr_setup(url = &quot;http://data.techno-science.ca/&quot;, key = &quot;my-ckan-api-key&quot;)
-</code></pre>
-
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># restores default CKAN url to http://data.techno-science.ca/</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">ckanr_setup</span>() </a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co"># Just set url</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="kw">ckanr_setup</span>(<span class="dt">url =</span> <span class="st">&quot;http://data.techno-science.ca/&quot;</span>)</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co"># set url and key</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="kw">ckanr_setup</span>(<span class="dt">url =</span> <span class="st">&quot;http://data.techno-science.ca/&quot;</span>, <span class="dt">key =</span> <span class="st">&quot;my-ckan-api-key&quot;</span>)</a></code></pre></div>
+</div>
+<div id="changes" class="section level2">
 <h2>Changes</h2>
-
-<pre><code class="r">changes(limit = 2, as = &quot;table&quot;)[, 1:4]
-#&gt;                                user_id                  timestamp
-#&gt; 1 27778230-2e90-4818-9f00-bbf778c8fa09 2016-06-14T21:31:28.306231
-#&gt; 2 27778230-2e90-4818-9f00-bbf778c8fa09 2016-06-14T21:30:26.594125
-#&gt;                              object_id
-#&gt; 1 99f457c9-ea24-48a1-87be-b52385825b6a
-#&gt; 2 99f457c9-ea24-48a1-87be-b52385825b6a
-#&gt;                            revision_id
-#&gt; 1 e2d9463d-e97c-48f5-a816-7fe26ee60dcd
-#&gt; 2 9d846213-1389-4dab-bfe5-77dd3256995a
-</code></pre>
-
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">changes</span>(<span class="dt">limit =</span> <span class="dv">2</span>, <span class="dt">as =</span> <span class="st">&quot;table&quot;</span>)[, <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>]</a></code></pre></div>
+</div>
+<div id="list-datasets" class="section level2">
 <h2>List datasets</h2>
-
-<pre><code class="r">package_list(as = &quot;table&quot;)
-#&gt;  [1] &quot;artifact-data-agriculture&quot;                                  
-#&gt;  [2] &quot;artifact-data-aviation&quot;                                     
-#&gt;  [3] &quot;artifact-data-bookbinding&quot;                                  
-#&gt;  [4] &quot;artifact-data-chemistry&quot;                                    
-#&gt;  [5] &quot;artifact-data-communications&quot;                               
-#&gt;  [6] &quot;artifact-data-computing-technology&quot;                         
-#&gt;  [7] &quot;artifact-data-domestic-technology&quot;                          
-#&gt;  [8] &quot;artifact-data-energy-electric&quot;                              
-#&gt;  [9] &quot;artifact-data-exploration-and-survey&quot;                       
-#&gt; [10] &quot;artifact-data-fisheries&quot;                                    
-...
-</code></pre>
-
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">package_list</span>(<span class="dt">as =</span> <span class="st">&quot;table&quot;</span>)</a></code></pre></div>
+</div>
+<div id="list-tags" class="section level2">
 <h2>List tags</h2>
-
-<pre><code class="r">tag_list(&#39;aviation&#39;, as = &#39;table&#39;)
-#&gt;   vocabulary_id                     display_name
-#&gt; 1            NA                         Aviation
-#&gt; 2            NA Canada Aviation and Space Museum
-#&gt;                                     id                             name
-#&gt; 1 cc1db2db-b08b-4888-897f-a17eade2461b                         Aviation
-#&gt; 2 8d05a650-bc7b-4b89-bcc8-c10177e60119 Canada Aviation and Space Museum
-</code></pre>
-
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">tag_list</span>(<span class="st">'aviation'</span>, <span class="dt">as =</span> <span class="st">'table'</span>)</a></code></pre></div>
+</div>
+<div id="show-tags" class="section level2">
 <h2>Show tags</h2>
-
 <p>Subset for readme brevity</p>
-
-<pre><code class="r">tag_show(&#39;Aviation&#39;)
-#&gt; &lt;CKAN Tag&gt; cc1db2db-b08b-4888-897f-a17eade2461b 
-#&gt;   Name: Aviation
-#&gt;   Display name: Aviation
-#&gt;   Vocabulary id: 
-#&gt;   No. Packages: 2
-#&gt;   Packages (up to 5): artifact-data-aviation, cstmc-smstc-artifacts-artefact
-</code></pre>
-
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">tag_show</span>(<span class="st">'Aviation'</span>)</a></code></pre></div>
+</div>
+<div id="list-groups" class="section level2">
 <h2>List groups</h2>
-
-<pre><code class="r">group_list(as = &#39;table&#39;)[, 1:3]
-#&gt;                         display_name description
-#&gt; 1                     Communications            
-#&gt; 2 Domestic and Industrial Technology            
-#&gt; 3                         Everything            
-#&gt; 4                           Location            
-#&gt; 5                          Resources            
-#&gt; 6         Scientific Instrumentation            
-#&gt; 7                     Transportation            
-#&gt;                                title
-#&gt; 1                     Communications
-#&gt; 2 Domestic and Industrial Technology
-#&gt; 3                         Everything
-#&gt; 4                           Location
-#&gt; 5                          Resources
-#&gt; 6         Scientific Instrumentation
-#&gt; 7                     Transportation
-</code></pre>
-
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">group_list</span>(<span class="dt">as =</span> <span class="st">'table'</span>)[, <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>]</a></code></pre></div>
+</div>
+<div id="show-groups" class="section level2">
 <h2>Show groups</h2>
-
 <p>Subset for readme brevity</p>
-
-<pre><code class="r">group_show(&#39;communications&#39;, as = &#39;table&#39;)$users
-#&gt;   openid about capacity     name                    created
-#&gt; 1     NA  &lt;NA&gt;    admin     marc 2014-10-24T14:44:29.885262
-#&gt; 2     NA          admin sepandar 2014-10-23T19:40:42.056418
-#&gt;                         email_hash sysadmin
-#&gt; 1 a32002c960476614370a16e9fb81f436    FALSE
-#&gt; 2 10b930a228afd1da2647d62e70b71bf8     TRUE
-#&gt;   activity_streams_email_notifications  state number_of_edits
-#&gt; 1                                FALSE active             516
-#&gt; 2                                FALSE active              44
-#&gt;   number_administered_packages display_name fullname
-#&gt; 1                           40         marc     &lt;NA&gt;
-#&gt; 2                            1     sepandar         
-#&gt;                                     id
-#&gt; 1 27778230-2e90-4818-9f00-bbf778c8fa09
-#&gt; 2 b50449ea-1dcc-4d52-b620-fc95bf56034b
-</code></pre>
-
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">group_show</span>(<span class="st">'communications'</span>, <span class="dt">as =</span> <span class="st">'table'</span>)<span class="op">$</span>users</a></code></pre></div>
+</div>
+<div id="show-a-package" class="section level2">
 <h2>Show a package</h2>
-
-<pre><code class="r">package_show(&#39;34d60b13-1fd5-430e-b0ec-c8bc7f4841cf&#39;, as = &#39;table&#39;)$resources[, 1:10]
-#&gt;                      resource_group_id cache_last_updated
-#&gt; 1 ea8533d9-cdc6-4e0e-97b9-894e06d50b92                 NA
-#&gt; 2 ea8533d9-cdc6-4e0e-97b9-894e06d50b92                 NA
-#&gt; 3 ea8533d9-cdc6-4e0e-97b9-894e06d50b92                 NA
-#&gt; 4 ea8533d9-cdc6-4e0e-97b9-894e06d50b92                 NA
-#&gt; 5 ea8533d9-cdc6-4e0e-97b9-894e06d50b92                 NA
-#&gt;           revision_timestamp webstore_last_updated
-#&gt; 1 2016-06-13T20:05:16.818800                    NA
-#&gt; 2 2014-11-04T02:59:50.567068                    NA
-#&gt; 3 2014-11-05T21:23:58.533397                    NA
-#&gt; 4 2014-11-05T21:25:16.848423                    NA
-#&gt; 5 2016-06-13T20:06:50.013746                    NA
-#&gt;                                     id size  state hash
-#&gt; 1 be2b0af8-24a8-4a55-8b30-89f5459b713a   NA active     
-#&gt; 2 7d65910e-4bdc-4f06-a213-e24e36762767   NA active     
-#&gt; 3 97622ad7-1507-4f6a-8acb-14e826447389   NA active     
-#&gt; 4 7a72498a-c49c-4e84-8b10-58991de10df6   NA active     
-#&gt; 5 7e2cb5de-550d-41a8-ab9d-b2ec35b6671a   NA active     
-#&gt;                                    description format
-#&gt; 1                                  XML Dataset    XML
-#&gt; 2 Data dictionary for CSTMC artifact datasets.    XLS
-#&gt; 3       Tips for using the artifacts datasets.   .php
-#&gt; 4       Tips for using the artifacts datasets.   .php
-#&gt; 5                          Jeux de données XML    XML
-</code></pre>
-
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">package_show</span>(<span class="st">'34d60b13-1fd5-430e-b0ec-c8bc7f4841cf'</span>, <span class="dt">as =</span> <span class="st">'table'</span>)<span class="op">$</span>resources[, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>]</a></code></pre></div>
+</div>
+<div id="search-for-packages" class="section level2">
 <h2>Search for packages</h2>
-
-<pre><code class="r">out &lt;- package_search(q = &#39;*:*&#39;, rows = 2, as = &quot;table&quot;)$results
-out[, !names(out) %in% &#39;resources&#39;][, 1:10]
-#&gt;                      license_title maintainer relationships_as_object
-#&gt; 1 Open Government Licence - Canada                               NULL
-#&gt; 2 Open Government Licence - Canada                               NULL
-#&gt;   private maintainer_email         revision_timestamp
-#&gt; 1   FALSE                  2014-10-28T21:27:57.475091
-#&gt; 2   FALSE                  2014-10-28T20:40:55.803602
-#&gt;                                     id           metadata_created
-#&gt; 1 99f457c9-ea24-48a1-87be-b52385825b6a 2014-10-24T17:39:06.411039
-#&gt; 2 443cb020-f2ae-48b1-be67-90df1abd298e 2014-10-28T20:39:23.561940
-#&gt;            metadata_modified author
-#&gt; 1 2016-06-14T21:31:27.983485       
-#&gt; 2 2016-06-14T18:59:17.786219
-</code></pre>
-
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">out &lt;-<span class="st"> </span><span class="kw">package_search</span>(<span class="dt">q =</span> <span class="st">'*:*'</span>, <span class="dt">rows =</span> <span class="dv">2</span>, <span class="dt">as =</span> <span class="st">&quot;table&quot;</span>)<span class="op">$</span>results</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">out[, <span class="op">!</span><span class="kw">names</span>(out) <span class="op">%in%</span><span class="st"> 'resources'</span>][, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>]</a></code></pre></div>
+</div>
+<div id="search-for-resources" class="section level2">
 <h2>Search for resources</h2>
-
-<pre><code class="r">resource_search(q = &#39;name:data&#39;, limit = 2, as = &#39;table&#39;)
-#&gt; $count
-#&gt; [1] 74
-#&gt; 
-#&gt; $results
-#&gt;                      resource_group_id cache_last_updated
-#&gt; 1 01a82e52-01bf-4a9c-9b45-c4f9b92529fa                 NA
-#&gt; 2 01a82e52-01bf-4a9c-9b45-c4f9b92529fa                 NA
-#&gt;   webstore_last_updated                                   id size  state
-#&gt; 1                    NA e179e910-27fb-44f4-a627-99822af49ffa   NA active
-#&gt; 2                    NA ba84e8b7-b388-4d2a-873a-7b107eb7f135   NA active
-#&gt;   last_modified hash                                  description format
-#&gt; 1            NA                                       XML Dataset    XML
-#&gt; 2            NA      Data dictionary for CSTMC artifact datasets.    XLS
-#&gt;   mimetype_inner url_type mimetype cache_url
-#&gt; 1             NA       NA       NA        NA
-#&gt; 2             NA       NA       NA        NA
-#&gt;                                           name                    created
-#&gt; 1 Artifact Data - Exploration and Survey (XML) 2014-10-28T15:50:35.374303
-#&gt; 2                              Data Dictionary 2014-11-03T18:01:02.094210
-#&gt;                                                                                                                                                    url
-#&gt; 1              http://source.techno-science.ca/datasets-donn%C3%A9es/artifacts-artefacts/groups-groupes/exploration-and-survey-exploration-et-leve.xml
-#&gt; 2 http://source.techno-science.ca/datasets-donn%C3%A9es/artifacts-artefacts/cstmc-artifact-data-dictionary-dictionnaire-de-donnees-artefacts-smstc.xls
-#&gt;   webstore_url position                          revision_id resource_type
-#&gt; 1           NA        0 a22e6741-3e89-4db0-a802-ba594b1c1fad            NA
-#&gt; 2           NA        1 da1f8585-521d-47ef-8ead-7832474a3421            NA
-</code></pre>
-
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">resource_search</span>(<span class="dt">q =</span> <span class="st">'name:data'</span>, <span class="dt">limit =</span> <span class="dv">2</span>, <span class="dt">as =</span> <span class="st">'table'</span>)</a></code></pre></div>
+</div>
+<div id="example-of-using-a-different-ckan-api" class="section level2">
 <h2>Example of using a different CKAN API</h2>
-
+<div id="the-uk-natural-history-museum" class="section level3">
 <h3>The UK Natural History Museum</h3>
-
-<p>Website: <a href="http://data.nhm.ac.uk/">http://data.nhm.ac.uk/</a></p>
-
+<p>Website: <a href="https://data.nhm.ac.uk/" class="uri">https://data.nhm.ac.uk/</a></p>
 <p>List datasets</p>
-
-<pre><code class="r">ckanr_setup(url = &quot;http://data.nhm.ac.uk&quot;)
-package_list(as = &quot;table&quot;)
-#&gt;  [1] &quot;3d-cetacean-scanning&quot;                                             
-#&gt;  [2] &quot;abyssline&quot;                                                        
-#&gt;  [3] &quot;african-spiny-solanum&quot;                                            
-#&gt;  [4] &quot;alice-test-images&quot;                                                
-#&gt;  [5] &quot;alignments-of-co1-nd1-and-16s-rrna-for-the-land-snail-corilla&quot;    
-#&gt;  [6] &quot;al-sabouni-et-al-reproducibility&quot;                                 
-#&gt;  [7] &quot;american-phlebotominae-nhm&quot;                                       
-#&gt;  [8] &quot;baleen-stable-isotope-data&quot;                                       
-#&gt;  [9] &quot;bibliography-scleractinia&quot;                                        
-#&gt; [10] &quot;bioacoustica&quot;                                                     
-...
-</code></pre>
-
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">ckanr_setup</span>(<span class="dt">url =</span> <span class="st">&quot;https://data.nhm.ac.uk&quot;</span>)</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="kw">package_list</span>(<span class="dt">as =</span> <span class="st">&quot;table&quot;</span>)</a></code></pre></div>
 <p>Tags</p>
-
 <p><em>list</em></p>
-
-<pre><code class="r">head(tag_list(as = &quot;table&quot;))
-#&gt;   vocabulary_id    display_name                                   id
-#&gt; 1            NA              3D b26c5cce-dc41-40c6-9cbf-f966aa75d458
-#&gt; 2            NA    3D modelling 119868d7-1753-4c35-8641-14681dc472a7
-#&gt; 3            NA         3D Scan d95f1342-574a-454b-9ada-533d417de418
-#&gt; 4            NA        3D scans 701e15ab-1d85-4935-ba82-a9926ef219df
-#&gt; 5            NA        accuracy 6428adf1-580a-4826-81b9-792b23bd0600
-#&gt; 6            NA Acid alteration 63d78282-b851-4be5-b4ee-9c5dfd929f5e
-#&gt;              name
-#&gt; 1              3D
-#&gt; 2    3D modelling
-#&gt; 3         3D Scan
-#&gt; 4        3D scans
-#&gt; 5        accuracy
-#&gt; 6 Acid alteration
-</code></pre>
-
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">head</span>(<span class="kw">tag_list</span>(<span class="dt">as =</span> <span class="st">&quot;table&quot;</span>))</a></code></pre></div>
 <p><em>show</em></p>
-
-<pre><code class="r">tag_show(&#39;arthropods&#39;, as = &#39;table&#39;)
-#&gt; $vocabulary_id
-#&gt; NULL
-#&gt; 
-#&gt; $packages
-#&gt; list()
-#&gt; 
-#&gt; $display_name
-#&gt; [1] &quot;arthropods&quot;
-#&gt; 
-#&gt; $id
-#&gt; [1] &quot;f9245868-f4cb-4c85-a59d-11692db19e86&quot;
-#&gt; 
-#&gt; $name
-#&gt; [1] &quot;arthropods&quot;
-</code></pre>
-
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">tag_show</span>(<span class="st">'arthropods'</span>, <span class="dt">as =</span> <span class="st">'table'</span>)</a></code></pre></div>
 <p>Packages</p>
-
 <p><em>search</em></p>
-
-<pre><code class="r">out &lt;- package_search(q = &#39;*:*&#39;, rows = 2, as = &#39;table&#39;)
-out$results[, 1:10]
-#&gt;                  license_title maintainer contributors
-#&gt; 1 Creative Commons Attribution         NA             
-#&gt; 2                      CC0-1.0         NA         &lt;NA&gt;
-#&gt;   relationships_as_object private maintainer_email num_tags
-#&gt; 1                    NULL   FALSE               NA        1
-#&gt; 2                    NULL   FALSE               NA        1
-#&gt;              affiliation update_frequency
-#&gt; 1 Natural History Museum                 
-#&gt; 2                   &lt;NA&gt;           weekly
-#&gt;                                     id
-#&gt; 1 d68e20f4-a56d-4a8a-a8d7-dc478ba64c76
-#&gt; 2 56e711e6-c847-4f99-915a-6894bb5c5dea
-</code></pre>
-
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">out &lt;-<span class="st"> </span><span class="kw">package_search</span>(<span class="dt">q =</span> <span class="st">'*:*'</span>, <span class="dt">rows =</span> <span class="dv">2</span>, <span class="dt">as =</span> <span class="st">'table'</span>)</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2">out<span class="op">$</span>results[, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>]</a></code></pre></div>
 <p><em>show</em></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw">package_show</span>(<span class="dt">id =</span> <span class="st">&quot;56e711e6-c847-4f99-915a-6894bb5c5dea&quot;</span>, <span class="dt">as =</span> <span class="st">&quot;table&quot;</span>)</a></code></pre></div>
+</div>
+</div>
 
-<pre><code class="r">package_show(id = &quot;56e711e6-c847-4f99-915a-6894bb5c5dea&quot;, as = &quot;table&quot;)
-#&gt; $domain
-#&gt; [1] &quot;data.nhm.ac.uk&quot;
-#&gt; 
-#&gt; $license_title
-#&gt; [1] &quot;CC0-1.0&quot;
-#&gt; 
-#&gt; $maintainer
-#&gt; NULL
-#&gt; 
-#&gt; $relationships_as_object
-...
-</code></pre>
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 
 </body>
-
 </html>
