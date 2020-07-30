@@ -46,7 +46,7 @@ test_that("resource_update gives back expected class types and output", {
 
   # expected output
   expect_equal(a$id, rid)
-  expect_true(grepl("actinidiaceae", a$url))
+  expect_equal(a$format, "CSV")
 })
 
 # html
@@ -70,7 +70,7 @@ test_that("resource_update gives back expected class types and output with html"
 
   # expected output
   expect_equal(a$id, xx$id)
-  expect_true(grepl(".html", a$url))
+  expect_equal(a$format, "HTML")
 })
 
 test_that("resource_update fails well", {
@@ -93,4 +93,31 @@ test_that("resource_update fails well", {
   # bad key
   expect_error(resource_update(rid, path=path, url=url, key="invalid-key"),
                "Authorization Error")
+})
+
+# extras on resource_create
+test_that("resource_create gives back expected key:value pairs", {
+  check_ckan(url)
+  check_resource(url, rid)
+
+  path <- system.file("examples", "mapbox.html", package = "ckanr")
+  xx <- resource_create(package_id = did, description = "a map, yay",
+                        name = "mapyay", upload = path,
+                        extras = list(map_type = "mapbox"),
+                        rcurl = "http://google.com", url = url, key = key)
+
+  # expected output
+  expect_equal(xx$map_type, "mapbox")
+})
+
+# extras on resource_update
+test_that("resource_update gives back expected key:value pairs", {
+  check_ckan(url)
+  check_resource(url, rid)
+
+  a <- resource_update(rid, path = path, extras = list(map_type = "mapbox"),
+                       url = url, key = key)
+
+  # expected output
+  expect_equal(a$map_type, "mapbox")
 })

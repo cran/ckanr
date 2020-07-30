@@ -4,33 +4,50 @@
 \alias{ds_search}
 \title{Datastore - search or get a dataset from CKRAN datastore}
 \usage{
-ds_search(resource_id = NULL, filters = NULL, q = NULL,
-  plain = NULL, language = NULL, fields = NULL, offset = NULL,
-  limit = NULL, sort = NULL, url = get_default_url(),
-  key = get_default_key(), as = "list", ...)
+ds_search(
+  resource_id = NULL,
+  filters = NULL,
+  q = NULL,
+  plain = NULL,
+  language = NULL,
+  fields = NULL,
+  offset = NULL,
+  limit = NULL,
+  sort = NULL,
+  url = get_default_url(),
+  key = get_default_key(),
+  as = "list",
+  ...
+)
 }
 \arguments{
-\item{resource_id}{(character) id or alias of the resource to be searched against}
+\item{resource_id}{(character) id or alias of the resource to be searched
+against}
 
-\item{filters}{(character) matching conditions to select, e.g {"key1": "a", "key2": "b"}
-(optional)}
+\item{filters}{(character) matching conditions to select, e.g
+\verb{\{"key1": "a", "key2": "b"\}} (optional)}
 
 \item{q}{(character) full text query (optional)}
 
-\item{plain}{(character) treat as plain text query (optional, default: TRUE)}
+\item{plain}{(character) treat as plain text query (optional, default:
+\code{TRUE})}
 
-\item{language}{(character) language of the full text query (optional, default: english)}
+\item{language}{(character) language of the full text query (optional,
+default: english)}
 
-\item{fields}{(character) fields to return (optional, default: all fields in original order)}
+\item{fields}{(character) fields to return (optional, default: all fields
+in original order)}
 
-\item{offset}{(numeric) Where to start getting activity items from (optional, default: 0)}
+\item{offset}{(numeric) Where to start getting activity items from
+(optional, default: 0)}
 
-\item{limit}{(numeric) The maximum number of activities to return (optional, default: 100)}
+\item{limit}{(numeric) The maximum number of activities to return
+(optional, default: 100)}
 
 \item{sort}{Field to sort on. You can specify ascending (e.g., score desc) or
-descending (e.g., score asc), sort by two fields (e.g., score desc, price asc),
-or sort by a function (e.g., sum(x_f, y_f) desc, which sorts by the sum of
-x_f and y_f in a descending order). (optional)}
+descending (e.g., score asc), sort by two fields (e.g., score desc,
+price asc), or sort by a function (e.g., sum(x_f, y_f) desc, which sorts
+by the sum of x_f and y_f in a descending order). (optional)}
 
 \item{url}{Base url to use. Default: \url{http://data.techno-science.ca}. See
 also \code{\link{ckanr_setup}} and \code{\link{get_default_url}}.}
@@ -42,20 +59,21 @@ uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to
 data to data.frame's when possible, so the result can vary from a vector, list or
 data.frame. (required)}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}} (optional)}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }
 \description{
 Datastore - search or get a dataset from CKRAN datastore
 }
 \details{
-From the help for this method "The datastore_search action allows you to search data
-in a resource. DataStore resources that belong to private CKAN resource can only be
-read by you if you have access to the CKAN resource and send the appropriate authorization."
+From the help for this method "The datastore_search action allows
+you to search data in a resource. DataStore resources that belong to
+private CKAN resource can only be read by you if you have access to the
+CKAN resource and send the appropriate authorization."
 
-Setting \code{plain=FALSE} enables the entire PostgreSQL \emph{full text search query language}.
-A listing of all available resources can be found at the alias \emph{table_metadata}
-full text search query language:
-\url{http://www.postgresql.org/docs/9.1/static/datatype-textsearch.html#DATATYPE-TSQUERY}.
+Setting \code{plain=FALSE} enables the entire PostgreSQL \emph{full text search query
+language}. A listing of all available resources can be found at the alias
+\emph{table_metadata} full text search query language:
+http://www.postgresql.org/docs/9.1/static/datatype-textsearch.html#DATATYPE-TSQUERY
 }
 \examples{
 \dontrun{

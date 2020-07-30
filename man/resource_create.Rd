@@ -4,17 +4,35 @@
 \alias{resource_create}
 \title{Create a resource}
 \usage{
-resource_create(package_id = NULL, rcurl = NULL, revision_id = NULL,
-  description = NULL, format = NULL, hash = NULL, name = NULL,
-  resource_type = NULL, mimetype = NULL, mimetype_inner = NULL,
-  webstore_url = NULL, cache_url = NULL, size = NULL,
-  created = NULL, last_modified = NULL, cache_last_updated = NULL,
-  webstore_last_updated = NULL, upload = NULL,
-  url = get_default_url(), key = get_default_key(), as = "list", ...)
+resource_create(
+  package_id = NULL,
+  rcurl = NULL,
+  revision_id = NULL,
+  description = NULL,
+  format = NULL,
+  hash = NULL,
+  name = NULL,
+  resource_type = NULL,
+  mimetype = NULL,
+  mimetype_inner = NULL,
+  webstore_url = NULL,
+  cache_url = NULL,
+  size = NULL,
+  created = NULL,
+  last_modified = NULL,
+  cache_last_updated = NULL,
+  webstore_last_updated = NULL,
+  upload = NULL,
+  extras = NULL,
+  url = get_default_url(),
+  key = get_default_key(),
+  as = "list",
+  ...
+)
 }
 \arguments{
-\item{package_id}{(character) id of package that the resource should be added to.
-This should be an alphanumeric string. Required.}
+\item{package_id}{(character) id of package that the resource should be
+added to. This should be an alphanumeric string. Required.}
 
 \item{rcurl}{(character) url of resource. Required.}
 
@@ -50,6 +68,8 @@ This should be an alphanumeric string. Required.}
 
 \item{upload}{(character) A path to a local file (optional)}
 
+\item{extras}{(list) - the resources' extra metadata fields (optional)}
+
 \item{url}{Base url to use. Default: \url{http://data.techno-science.ca}. See
 also \code{\link{ckanr_setup}} and \code{\link{get_default_url}}.}
 
@@ -60,7 +80,7 @@ uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to
 data to data.frame's when possible, so the result can vary from a vector, list or
 data.frame. (required)}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}} (optional)}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }
 \description{
 Create a resource
@@ -68,7 +88,8 @@ Create a resource
 \examples{
 \dontrun{
 # Setup
-ckanr_setup(url = "https://demo.ckan.org/", key = getOption("ckan_demo_key"))
+ckanr_setup(url = "https://demo.ckan.org/",
+ key = getOption("ckan_demo_key"))
 
 # create a package
 (res <- package_create("foobarrrr", author="Jane Doe"))
@@ -79,6 +100,7 @@ file <- system.file("examples", "actinidiaceae.csv", package = "ckanr")
                        description = "my resource",
                        name = "bears",
                        upload = file,
+                       extras = list(species = "grizzly"),
                        rcurl = "http://google.com"
 ))
 
@@ -86,6 +108,7 @@ package_create("foobbbbbarrrr") \%>\%
    resource_create(description = "my resource",
                    name = "bearsareus",
                    upload = file,
+                   extras = list(my_extra = "some value"),
                    rcurl = "http://google.com")
 }
 }

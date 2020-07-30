@@ -4,8 +4,13 @@
 \alias{user_follower_count}
 \title{Return a a user's follower count}
 \usage{
-user_follower_count(id, url = get_default_url(),
-  key = get_default_key(), as = "list", ...)
+user_follower_count(
+  id,
+  url = get_default_url(),
+  key = get_default_key(),
+  as = "list",
+  ...
+)
 }
 \arguments{
 \item{id}{(character) User identifier.}
@@ -20,7 +25,7 @@ uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to
 data to data.frame's when possible, so the result can vary from a vector, list or
 data.frame. (required)}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}} (optional)}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }
 \description{
 Return a a user's follower count

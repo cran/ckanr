@@ -4,9 +4,19 @@
 \alias{user_create}
 \title{Create a user.}
 \usage{
-user_create(name, email, password, id = NULL, fullname = NULL,
-  about = NULL, openid = NULL, url = get_default_url(),
-  key = get_default_key(), as = "list", ...)
+user_create(
+  name,
+  email,
+  password,
+  id = NULL,
+  fullname = NULL,
+  about = NULL,
+  openid = NULL,
+  url = get_default_url(),
+  key = get_default_key(),
+  as = "list",
+  ...
+)
 }
 \arguments{
 \item{name}{(character) the name of the new user, a string between 2 and 100
@@ -36,7 +46,7 @@ uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to
 data to data.frame's when possible, so the result can vary from a vector, list or
 data.frame. (required)}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}} (optional)}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }
 \description{
 Create a user.
@@ -44,12 +54,14 @@ Create a user.
 \examples{
 \dontrun{
 # Setup
-ckanr_setup(url = "https://data-demo.dpaw.wa.gov.au", key = "824e7c50-9577-4bfa-bf32-246ebed1a8a2")
+ckanr_setup(url = "https://data-demo.dpaw.wa.gov.au",
+  key = "824e7c50-9577-4bfa-bf32-246ebed1a8a2")
 
 # create a user
-user_create(name = 'stacy', email = "stacy@aaaaa.com", password = "helloworld")
+user_create(name = 'stacy', email = "stacy@aaaaa.com",
+password = "helloworld")
 }
 }
 \references{
-\url{http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.create.user_create}
+http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.create.user_create
 }

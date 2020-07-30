@@ -7,7 +7,8 @@
 #' @template key 
 #' @examples \dontrun{
 #' # Setup
-#' ckanr_setup(url = "https://demo.ckan.org/", key = Sys.getenv("CKAN_DEMO_KEY"))
+#' ckanr_setup(url = "https://demo.ckan.org/",
+#' key = Sys.getenv("CKAN_DEMO_KEY"))
 #'
 #' # create a package
 #' (res <- package_create("yellow7"))
@@ -32,8 +33,9 @@
 resource_show <- function(id, url = get_default_url(), key = get_default_key(),
   as = 'list', ...) {
 
-  id <- as.ckan_resource(id, url = url)
-  res <- ckan_GET(url, 'resource_show', list(id = id$id), key = key, ...)
+  id <- as.ckan_resource(id, url = url, key = key)
+  res <- ckan_GET(url, 'resource_show', list(id = id$id), key = key,
+    opts = list(...))
   switch(as, json = res, list = as_ck(jsl(res), "ckan_resource"),
     table = jsd(res))
 }

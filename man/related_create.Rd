@@ -4,9 +4,19 @@
 \alias{related_create}
 \title{Create a related item}
 \usage{
-related_create(id, title, type, description = NULL, related_id = NULL,
-  related_url = NULL, image_url = NULL, url = get_default_url(),
-  key = get_default_key(), as = "list", ...)
+related_create(
+  id,
+  title,
+  type,
+  description = NULL,
+  related_id = NULL,
+  related_url = NULL,
+  image_url = NULL,
+  url = get_default_url(),
+  key = get_default_key(),
+  as = "list",
+  ...
+)
 }
 \arguments{
 \item{id}{(character) id of package that the related item should be added to.
@@ -14,15 +24,16 @@ This should be an alphanumeric string. Required.}
 
 \item{title}{(character) Title of the related item. Required.}
 
-\item{type}{(character) The type of the related item. One of API, application,
-idea, news article, paper, post or visualization. Required.}
+\item{type}{(character) The type of the related item. One of API,
+application, idea, news article, paper, post or visualization. Required.}
 
 \item{description}{(character) description (optional). Optional}
 
-\item{related_id}{(character) An id to assign to the related item. If blank, an
-ID will be assigned for you. Optional}
+\item{related_id}{(character) An id to assign to the related item. If blank,
+an ID will be assigned for you. Optional}
 
-\item{related_url}{(character) A url to associated with the related item. Optional}
+\item{related_url}{(character) A url to associated with the related item.
+Optional}
 
 \item{image_url}{(character) A url to associated image. Optional}
 
@@ -36,7 +47,7 @@ uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to
 data to data.frame's when possible, so the result can vary from a vector, list or
 data.frame. (required)}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}} (optional)}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }
 \description{
 Create a related item

@@ -4,8 +4,15 @@
 \alias{user_activity_list}
 \title{Return a list of a user's activities}
 \usage{
-user_activity_list(id, offset = 0, limit = 31,
-  url = get_default_url(), key = get_default_key(), as = "list", ...)
+user_activity_list(
+  id,
+  offset = 0,
+  limit = 31,
+  url = get_default_url(),
+  key = get_default_key(),
+  as = "list",
+  ...
+)
 }
 \arguments{
 \item{id}{(character) User identifier.}
@@ -24,7 +31,7 @@ uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to
 data to data.frame's when possible, so the result can vary from a vector, list or
 data.frame. (required)}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}} (optional)}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }
 \description{
 Return a list of a user's activities
@@ -32,7 +39,8 @@ Return a list of a user's activities
 \examples{
 \dontrun{
 # Setup
-ckanr_setup(url = "https://demo.ckan.org/", key = getOption("ckan_demo_key"))
+ckanr_setup(url = "https://demo.ckan.org/",
+key = getOption("ckan_demo_key"))
 
 # list package activity
 user_activity_list('sckottie')

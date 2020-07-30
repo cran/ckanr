@@ -4,9 +4,17 @@
 \alias{group_list}
 \title{List groups.}
 \usage{
-group_list(offset = 0, limit = 31, sort = NULL, groups = NULL,
-  all_fields = FALSE, url = get_default_url(),
-  key = get_default_key(), as = "list", ...)
+group_list(
+  offset = 0,
+  limit = 31,
+  sort = NULL,
+  groups = NULL,
+  all_fields = FALSE,
+  url = get_default_url(),
+  key = get_default_key(),
+  as = "list",
+  ...
+)
 }
 \arguments{
 \item{offset}{(numeric) Where to start getting activity items from (optional, default: 0)}
@@ -22,7 +30,7 @@ x_f and y_f in a descending order).}
 only groups whose names are in this list will be returned}
 
 \item{all_fields}{(logical) Return full group dictionaries instead of just
-names. Default: FALSE}
+names. Default: \code{FALSE}}
 
 \item{url}{Base url to use. Default: \url{http://data.techno-science.ca}. See
 also \code{\link{ckanr_setup}} and \code{\link{get_default_url}}.}
@@ -34,15 +42,15 @@ uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to
 data to data.frame's when possible, so the result can vary from a vector, list or
 data.frame. (required)}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}} (optional)}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }
 \description{
 List groups.
 }
 \examples{
 \dontrun{
-group_list()
-group_list(as = 'json')
-group_list(as = 'table')
+group_list(limit = 3)
+group_list(limit = 3, as = 'json')
+group_list(limit = 3, as = 'table')
 }
 }

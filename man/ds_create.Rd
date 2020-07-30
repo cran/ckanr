@@ -4,28 +4,37 @@
 \alias{ds_create}
 \title{Add a new table to a datastore}
 \usage{
-ds_create(resource_id = NULL, resource = NULL, force = FALSE,
-  aliases = NULL, fields = NULL, records = NULL,
-  primary_key = NULL, indexes = NULL, url = get_default_url(),
-  key = get_default_key(), as = "list", ...)
+ds_create(
+  resource_id = NULL,
+  resource = NULL,
+  force = FALSE,
+  aliases = NULL,
+  fields = NULL,
+  records = NULL,
+  primary_key = NULL,
+  indexes = NULL,
+  url = get_default_url(),
+  key = get_default_key(),
+  as = "list",
+  ...
+)
 }
 \arguments{
 \item{resource_id}{(string) Resource id that the data is going to be stored
 against.}
 
 \item{resource}{(dictionary) Resource dictionary that is passed to
-resource_create(). Use instead of \code{resource_id} (optional)}
+\code{\link[=resource_create]{resource_create()}}. Use instead of \code{resource_id} (optional)}
 
 \item{force}{(logical) Set to \code{TRUE} to edit a read-only resource.
-Default: FALSE}
+Default: \code{FALSE}}
 
 \item{aliases}{(character) Names for read only aliases of the resource.
 (optional)}
 
 \item{fields}{(list) Fields/columns and their extra metadata. (optional)}
 
-\item{records}{(list) The data, eg: \code{[{"dob": "2005", "some_stuff":
-["a", "b"]}]} (optional)}
+\item{records}{(list) The data, eg: \verb{[\{"dob": "2005", "some_stuff": ["a", "b"]\}]} (optional)}
 
 \item{primary_key}{(character) Fields that represent a unique key (optional)}
 
@@ -41,15 +50,18 @@ uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to
 data to data.frame's when possible, so the result can vary from a vector, list or
 data.frame. (required)}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}} (optional)}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }
 \description{
 BEWARE: This function still doesn't quite work yet.
 }
 \examples{
 \dontrun{
+ckanr_setup(url = "https://demo.ckan.org/",
+  key = getOption("ckan_demo_key"))
+
 # create a package
-(res <- package_create("foobarrrr", author="Jane Doe"))
+(res <- package_create("foobarrrrr", author="Jane Doe"))
 
 # then create a resource
 file <- system.file("examples", "actinidiaceae.csv", package = "ckanr")
@@ -59,8 +71,8 @@ file <- system.file("examples", "actinidiaceae.csv", package = "ckanr")
                        upload = file,
                        rcurl = "http://google.com"
 ))
-ds_create(resource_id = "f4129802-22aa-4437-b9f9-8a8f3b7b2a53",
-         records = iris, force = TRUE, key = "my-api-key")
+ds_create(resource_id = xx$id, records = iris, force = TRUE)
+resource_show(xx$id)
 }
 }
 \references{

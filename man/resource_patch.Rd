@@ -4,8 +4,14 @@
 \alias{resource_patch}
 \title{Update a resource's metadata}
 \usage{
-resource_patch(x, id, url = get_default_url(), key = get_default_key(),
-  as = "list", ...)
+resource_patch(
+  x,
+  id,
+  url = get_default_url(),
+  key = get_default_key(),
+  as = "list",
+  ...
+)
 }
 \arguments{
 \item{x}{(list) A list with key-value pairs}
@@ -22,7 +28,7 @@ uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to
 data to data.frame's when possible, so the result can vary from a vector, list or
 data.frame. (required)}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}} (optional)}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }
 \description{
 Update a resource's metadata
@@ -32,14 +38,25 @@ Update a resource's metadata
 # Setup
 ckanr_setup(url = "https://demo.ckan.org", key = getOption("ckan_demo_key"))
 
+# create a package
+(res <- package_create("twist", author="Alexandria"))
+
+# then create a resource
+file <- system.file("examples", "actinidiaceae.csv", package = "ckanr")
+(xx <- resource_create(package_id = res$id, description = "my resource"))
+
 # Get a resource
-res <- resource_show("b85948b6-f9ea-4392-805e-00511d6cf6c6")
+res <- resource_show(xx$id)
 res$description
 
 # Make some changes
 x <- list(description = "My newer description")
-resource_patch(x, id = res)
-# or pass id in directly
-# resource_patch(x, id = res$id)
+z <- resource_patch(x, id = res)
+z$description
+
+# Add an extra key:value pair
+extra <- list("extra_key" = "my special value")
+zz <- resource_patch(extra, id = res)
+zz$extra_key
 }
 }

@@ -4,8 +4,15 @@
 \alias{tag_list}
 \title{List tags.}
 \usage{
-tag_list(query = NULL, vocabulary_id = NULL, all_fields = FALSE,
-  url = get_default_url(), key = get_default_key(), as = "list", ...)
+tag_list(
+  query = NULL,
+  vocabulary_id = NULL,
+  all_fields = FALSE,
+  url = get_default_url(),
+  key = get_default_key(),
+  as = "list",
+  ...
+)
 }
 \arguments{
 \item{query}{(character) A tag name query to search for, if given only tags
@@ -15,7 +22,7 @@ whose names contain this string will be returned}
 only tags that belong to this vocabulary will be returned}
 
 \item{all_fields}{(logical) Return full tag dictionaries instead of
-just names. Default: FALSE}
+just names. Default: \code{FALSE}}
 
 \item{url}{Base url to use. Default: \url{http://data.techno-science.ca}. See
 also \code{\link{ckanr_setup}} and \code{\link{get_default_url}}.}
@@ -27,7 +34,7 @@ uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to
 data to data.frame's when possible, so the result can vary from a vector, list or
 data.frame. (required)}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}} (optional)}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }
 \description{
 List tags.

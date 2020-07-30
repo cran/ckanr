@@ -4,8 +4,13 @@
 \alias{user_delete}
 \title{Delete a user.}
 \usage{
-user_delete(id, url = get_default_url(), key = get_default_key(),
-  as = "list", ...)
+user_delete(
+  id,
+  url = get_default_url(),
+  key = get_default_key(),
+  as = "list",
+  ...
+)
 }
 \arguments{
 \item{id}{(character) the id of the new user (required)}
@@ -20,7 +25,7 @@ uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to
 data to data.frame's when possible, so the result can vary from a vector, list or
 data.frame. (required)}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}} (optional)}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }
 \description{
 Delete a user.
@@ -28,15 +33,17 @@ Delete a user.
 \examples{
 \dontrun{
 # Setup
-ckanr_setup(url = "https://data-demo.dpaw.wa.gov.au", key = "824e7c50-9577-4bfa-bf32-246ebed1a8a2")
+ckanr_setup(url = "https://data-demo.dpaw.wa.gov.au",
+key = "824e7c50-9577-4bfa-bf32-246ebed1a8a2")
 
 # create a user
-res <- user_delete(name = 'stacy', email = "stacy@aaaaa.com", password = "helloworld")
+res <- user_delete(name = 'stacy', email = "stacy@aaaaa.com",
+password = "helloworld")
 
 # then, delete a user
 user_delete(id = "stacy")
 }
 }
 \references{
-\url{http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.delete.user_delete}
+http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.delete.user_delete
 }

@@ -2,8 +2,8 @@
 #'
 #' @export
 #'
-#' @param package_id (character) id of package that the resource should be added to.
-#' This should be an alphanumeric string. Required.
+#' @param package_id (character) id of package that the resource should be
+#' added to. This should be an alphanumeric string. Required.
 #' @param rcurl (character) url of resource. Required.
 #' @param description (character) description (optional). Required.
 #' @param name (character) name (optional). Required.
@@ -21,12 +21,14 @@
 #' @param cache_last_updated (character) iso date string (optional)
 #' @param webstore_last_updated (character) iso date string (optional)
 #' @param upload (character) A path to a local file (optional)
+#' @param extras (list) - the resources' extra metadata fields (optional)
 #' @template args
 #' @template key
 #'
 #' @examples \dontrun{
 #' # Setup
-#' ckanr_setup(url = "https://demo.ckan.org/", key = getOption("ckan_demo_key"))
+#' ckanr_setup(url = "https://demo.ckan.org/",
+#'  key = getOption("ckan_demo_key"))
 #'
 #' # create a package
 #' (res <- package_create("foobarrrr", author="Jane Doe"))
@@ -37,6 +39,7 @@
 #'                        description = "my resource",
 #'                        name = "bears",
 #'                        upload = file,
+#'                        extras = list(species = "grizzly"),
 #'                        rcurl = "http://google.com"
 #' ))
 #'
@@ -44,6 +47,7 @@
 #'    resource_create(description = "my resource",
 #'                    name = "bearsareus",
 #'                    upload = file,
+#'                    extras = list(my_extra = "some value"),
 #'                    rcurl = "http://google.com")
 #' }
 resource_create <- function(package_id = NULL, rcurl = NULL,
@@ -51,27 +55,30 @@ resource_create <- function(package_id = NULL, rcurl = NULL,
   name = NULL, resource_type = NULL, mimetype = NULL,
   mimetype_inner = NULL, webstore_url = NULL, cache_url = NULL, size = NULL,
   created = NULL, last_modified = NULL, cache_last_updated = NULL,
-  webstore_last_updated = NULL, upload = NULL, url = get_default_url(),
-  key = get_default_key(), as = 'list', ...) {
+  webstore_last_updated = NULL, upload = NULL, extras = NULL,
+  url = get_default_url(), key = get_default_key(), as = 'list', ...) {
 
-  id <- as.ckan_package(package_id, url = url)
+  id <- as.ckan_package(package_id, url = url, key = key)
   body <- cc(list(package_id = id$id, url = rcurl, revision_id = revision_id,
-                  description = description, format = format, hash = hash,
-                  name = name, resource_type = resource_type, mimetype = mimetype,
-                  mimetype_inner = mimetype_inner, webstore_url = webstore_url,
-                  cache_url = cache_url, size = size, created = created,
-                  last_modified = last_modified,
-                  cache_last_updated = cache_last_updated,
-                  webstore_last_updated = webstore_last_updated,
-                  upload = upfile(upload)))
-  res <- ckan_POST(url, 'resource_create', body = body, key = key, ...)
-  switch(as, json = res, list = as_ck(jsl(res), "ckan_resource"), table = jsd(res))
+    description = description, format = format, hash = hash,
+    name = name, resource_type = resource_type, mimetype = mimetype,
+    mimetype_inner = mimetype_inner, webstore_url = webstore_url,
+    cache_url = cache_url, size = size, created = created,
+    last_modified = last_modified,
+    cache_last_updated = cache_last_updated,
+    webstore_last_updated = webstore_last_updated,
+    upload = upfile(upload)))
+  body <- c(body, extras)
+  res <- ckan_POST(url, 'resource_create', body = body, key = key,
+    opts = list(...))
+  switch(as, json = res, list = as_ck(jsl(res), "ckan_resource"),
+    table = jsd(res))
 }
 
 upfile <- function(x) {
   if (is.null(x)) {
     NULL
   } else {
-    upload_file(x)
+    crul::upload(x)
   }
 }

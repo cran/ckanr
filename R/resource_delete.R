@@ -3,9 +3,9 @@
 #' @export
 #'
 #' @param id (character) Resource identifier.
-#' @param url Base url to use. Default: \url{http://data.techno-science.ca}. See
-#' also \code{\link{ckanr_setup}} and \code{\link{get_default_url}}.
-#' @param ... Curl args passed on to \code{\link[httr]{POST}} (optional)
+#' @param url Base url to use. Default: http://data.techno-science.ca
+#' See also [ckanr_setup()] and [get_default_url()].
+#' @param ... Curl args passed on to [crul::verb-POST] (optional)
 #' @template key
 #' @examples \dontrun{
 #' # Setup
@@ -26,11 +26,11 @@
 #' # delete the resource
 #' resource_delete(xx)
 #' }
-resource_delete <- function(id, url = get_default_url(), key = get_default_key(),
-  ...) {
+resource_delete <- function(id, url = get_default_url(),
+  key = get_default_key(), ...) {
   
   id <- as.ckan_resource(id, url = url)
   tmp <- ckan_POST(url, 'resource_delete', body = list(id = id$id), key = key,
-    ...)
+    opts = list(...))
   jsonlite::fromJSON(tmp)$success
 }

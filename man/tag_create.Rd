@@ -4,8 +4,14 @@
 \alias{tag_create}
 \title{Create a tag}
 \usage{
-tag_create(name, vocabulary_id, url = get_default_url(),
-  key = get_default_key(), as = "list", ...)
+tag_create(
+  name,
+  vocabulary_id,
+  url = get_default_url(),
+  key = get_default_key(),
+  as = "list",
+  ...
+)
 }
 \arguments{
 \item{name}{(character) The name for the new tag, a string between 2 and 100
@@ -25,7 +31,7 @@ uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to
 data to data.frame's when possible, so the result can vary from a vector, list or
 data.frame. (required)}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}} (optional)}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }
 \description{
 IMPORTANT: You must be a sysadmin to create vocabulary tags.

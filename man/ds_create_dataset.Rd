@@ -4,8 +4,15 @@
 \alias{ds_create_dataset}
 \title{Datastore - create a new resource on an existing dataset}
 \usage{
-ds_create_dataset(package_id, name, path, url = get_default_url(),
-  key = get_default_key(), as = "list", ...)
+ds_create_dataset(
+  package_id,
+  name,
+  path,
+  url = get_default_url(),
+  key = get_default_key(),
+  as = "list",
+  ...
+)
 }
 \arguments{
 \item{package_id}{(character) Existing package ID (required)}
@@ -24,7 +31,7 @@ uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to
 data to data.frame's when possible, so the result can vary from a vector, list or
 data.frame. (required)}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}} (optional)}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }
 \description{
 Datastore - create a new resource on an existing dataset
@@ -53,5 +60,5 @@ ds_create_dataset(package_id=get_test_pid(), name="mydata",
 }
 }
 \references{
-\url{http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.create.resource_create}
+http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.create.resource_create
 }

@@ -4,8 +4,14 @@
 \alias{changes}
 \title{Get an activity stream of recently changed datasets on a site.}
 \usage{
-changes(offset = 0, limit = 31, url = get_default_url(),
-  key = get_default_key(), as = "list", ...)
+changes(
+  offset = 0,
+  limit = 31,
+  url = get_default_url(),
+  key = get_default_key(),
+  as = "list",
+  ...
+)
 }
 \arguments{
 \item{offset}{(numeric) Where to start getting activity items from (optional, default: 0)}
@@ -22,7 +28,7 @@ uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to
 data to data.frame's when possible, so the result can vary from a vector, list or
 data.frame. (required)}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}} (optional)}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }
 \description{
 Get an activity stream of recently changed datasets on a site.

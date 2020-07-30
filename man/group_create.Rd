@@ -4,52 +4,73 @@
 \alias{group_create}
 \title{Create a group}
 \usage{
-group_create(name = NULL, id = NULL, title = NULL,
-  description = NULL, image_url = NULL, type = NULL,
-  state = "active", approval_status = NULL, extras = NULL,
-  packages = NULL, groups = NULL, users = NULL,
-  url = get_default_url(), key = get_default_key(), as = "list", ...)
+group_create(
+  name = NULL,
+  id = NULL,
+  title = NULL,
+  description = NULL,
+  image_url = NULL,
+  type = NULL,
+  state = "active",
+  approval_status = NULL,
+  extras = NULL,
+  packages = NULL,
+  groups = NULL,
+  users = NULL,
+  url = get_default_url(),
+  key = get_default_key(),
+  as = "list",
+  ...
+)
 }
 \arguments{
-\item{name}{(character) the name of the new dataset, must be between 2 and 100 characters
-long and contain only lowercase alphanumeric characters, - and _, e.g. 'warandpeace'}
+\item{name}{(character) the name of the new dataset, must be between 2 and
+100 characters long and contain only lowercase alphanumeric characters,
+\itemize{
+\item and _, e.g. 'warandpeace'
+}}
 
 \item{id}{(character) The id of the group (optional)}
 
-\item{title}{(character) The title of the dataset (optional, default: same as name)}
+\item{title}{(character) The title of the dataset (optional, default:
+same as name)}
 
 \item{description}{(character) The description of the group (optional)}
 
 \item{image_url}{(character) The URL to an image to be displayed on the
 group's page (optional)}
 
-\item{type}{(character) The type of the dataset (optional), IDatasetForm plugins associate
-themselves with different dataset types and provide custom dataset handling behaviour
-for these types}
+\item{type}{(character) The type of the dataset (optional), IDatasetForm
+plugins associate themselves with different dataset types and provide custom
+dataset handling behaviour for these types}
 
-\item{state}{(character) The current state of the dataset, e.g. 'active' or 'deleted',
-only active datasets show up in search results and other lists of datasets, this parameter
-will be ignored if you are not authorized to change the state of the dataset (optional,
-default: 'active')}
+\item{state}{(character) The current state of the dataset, e.g. 'active' or
+'deleted', only active datasets show up in search results and other lists
+of datasets, this parameter will be ignored if you are not authorized to
+change the state of the dataset (optional, default: 'active')}
 
 \item{approval_status}{(character) Approval status (optional)}
 
-\item{extras}{(list of dataset extra dictionaries) The dataset's extras (optional),
-extras are arbitrary (key: value) metadata items that can be added to datasets, each
-extra dictionary should have keys 'key' (a string), 'value' (a string)}
+\item{extras}{(list of dataset extra dictionaries) The dataset's extras
+(optional), extras are arbitrary (key: value) metadata items that can be
+added to datasets, each extra dictionary should have keys 'key' (a string),
+'value' (a string)}
 
-\item{packages}{(list of dictionaries) The datasets (packages) that belong to the group,
-a list of dictionaries each with keys 'name' (string, the id or name of the dataset)
-and optionally 'title' (string, the title of the dataset)}
+\item{packages}{(list of dictionaries) The datasets (packages) that belong
+to the group, a list of dictionaries each with keys 'name' (string, the id
+or name of the dataset) and optionally 'title' (string, the title of
+the dataset)}
 
-\item{groups}{(list of dictionaries) The groups to which the dataset belongs (optional),
-each group dictionary should have one or more of the following keys which identify an
-existing group: 'id' (the id of the group, string), or 'name' (the name of the group,
-string), to see which groups exist call group_list()}
+\item{groups}{(list of dictionaries) The groups to which the dataset
+belongs (optional), each group dictionary should have one or more of the
+following keys which identify an existing group: 'id' (the id of the group,
+string), or 'name' (the name of the group, string), to see which groups
+exist call group_list()}
 
-\item{users}{(list of dictionaries) The users that belong to the group, a list of
-dictionaries each with key 'name' (string, the id or name of the user) and optionally
-'capacity' (string, the capacity in which the user is a member of the group)}
+\item{users}{(list of dictionaries) The users that belong to the group,
+a list of dictionaries each with key 'name' (string, the id or name of the
+user) and optionally 'capacity' (string, the capacity in which the user is
+a member of the group)}
 
 \item{url}{Base url to use. Default: \url{http://data.techno-science.ca}. See
 also \code{\link{ckanr_setup}} and \code{\link{get_default_url}}.}
@@ -61,7 +82,7 @@ uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to
 data to data.frame's when possible, so the result can vary from a vector, list or
 data.frame. (required)}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}} (optional)}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }
 \description{
 Create a group

@@ -4,13 +4,26 @@
 \alias{package_patch}
 \title{Update a package's metadata}
 \usage{
-package_patch(x, id, key = get_default_key(), url = get_default_url(),
-  as = "list", ...)
+package_patch(
+  x,
+  id = NULL,
+  extras = NULL,
+  key = get_default_key(),
+  url = get_default_url(),
+  as = "list",
+  ...
+)
 }
 \arguments{
 \item{x}{(list) A list with key-value pairs}
 
-\item{id}{(character) Resource ID to update (required)}
+\item{id}{(character) Resource ID to update (optional, required if
+x does not have an "id" field)}
+
+\item{extras}{(character vector) - the dataset's extras
+(optional), extras are arbitrary (key: value) metadata items that can be
+added to datasets, each extra dictionary should have keys 'key' (a string),
+'value' (a string)}
 
 \item{key}{A privileged CKAN API key, Default: your key set with \code{\link{ckanr_setup}}}
 
@@ -22,7 +35,7 @@ uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to
 data to data.frame's when possible, so the result can vary from a vector, list or
 data.frame. (required)}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}} (optional)}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }
 \description{
 Update a package's metadata
@@ -38,5 +51,9 @@ ckanr_setup(url = "https://demo.ckan.org", key = getOption("ckan_demo_key"))
 # Get a resource
 res <- package_show(res$id)
 res$title
+
+# patch
+package_patch(res, extras = list(list(key = "foo", value = "bar")))
+unclass(package_show(res))
 }
 }

@@ -4,8 +4,13 @@
 \alias{resource_show}
 \title{Show a resource.}
 \usage{
-resource_show(id, url = get_default_url(), key = get_default_key(),
-  as = "list", ...)
+resource_show(
+  id,
+  url = get_default_url(),
+  key = get_default_key(),
+  as = "list",
+  ...
+)
 }
 \arguments{
 \item{id}{(character) Resource identifier.}
@@ -20,7 +25,7 @@ uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to
 data to data.frame's when possible, so the result can vary from a vector, list or
 data.frame. (required)}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}} (optional)}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }
 \description{
 Show a resource.
@@ -28,7 +33,8 @@ Show a resource.
 \examples{
 \dontrun{
 # Setup
-ckanr_setup(url = "https://demo.ckan.org/", key = Sys.getenv("CKAN_DEMO_KEY"))
+ckanr_setup(url = "https://demo.ckan.org/",
+key = Sys.getenv("CKAN_DEMO_KEY"))
 
 # create a package
 (res <- package_create("yellow7"))

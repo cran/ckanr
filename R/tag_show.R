@@ -4,8 +4,8 @@
 #'
 #' @param id (character) The name or id of the tag
 #' @param include_datasets include a list of up to 1000 of the tag's datasets.
-#'  Limit 1000 datasets, use \code{\link{package_search}} for more.
-#'  (optional, default: False)
+#' Limit 1000 datasets, use [package_search()] for more.
+#' (optional, default: `FALSE`)
 #' @template args
 #' @template key
 #' @examples \dontrun{
@@ -25,7 +25,8 @@ tag_show <- function(id, include_datasets = FALSE, url = get_default_url(),
 
   id <- as.ckan_tag(id, url = url)
   res <- ckan_GET(url, 'tag_show',
-    list(id = id$id, include_datasets = include_datasets), key = key, ...)
+    query = list(id = id$id, include_datasets = include_datasets), key = key,
+    opts = list(...))
   switch(as, json = res, list = as_ck(jsl(res), "ckan_tag"),
     table = jsd(res))
 }

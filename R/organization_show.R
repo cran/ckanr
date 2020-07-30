@@ -8,8 +8,8 @@
 #' @template args
 #' @template key
 #' @details By default the help and success slots are dropped, and only the
-#'   result slot is returned. You can request raw json with \code{as = 'json'}
-#'   then parse yourself to get the help slot.
+#' result slot is returned. You can request raw json with `as = 'json'`
+#' then parse yourself to get the help slot.
 #' @examples \dontrun{
 #' ckanr_setup(url = "https://demo.ckan.org/", key = getOption("ckan_demo_key"))
 #'
@@ -21,7 +21,7 @@ organization_show <- function(id, include_datasets = FALSE,
 
   id <- as.ckan_organization(id, url = url)
   args <- cc(list(id = id$id, include_datasets = include_datasets))
-  res <- ckan_GET(url, 'organization_show', args, key = key, ...)
+  res <- ckan_GET(url, 'organization_show', args, key = key, opts = list(...))
   switch(as, json = res, list = as_ck(jsl(res), "ckan_organization"),
     table = jsd(res))
 }

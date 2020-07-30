@@ -4,14 +4,20 @@
 \alias{group_show}
 \title{Show a package}
 \usage{
-group_show(id, include_datasets = TRUE, url = get_default_url(),
-  key = get_default_key(), as = "list", ...)
+group_show(
+  id,
+  include_datasets = TRUE,
+  url = get_default_url(),
+  key = get_default_key(),
+  as = "list",
+  ...
+)
 }
 \arguments{
 \item{id}{(character) Package identifier.}
 
 \item{include_datasets}{(logical) Include a list of the group's datasets.
-Default: TRUE}
+Default: \code{TRUE}}
 
 \item{url}{Base url to use. Default: \url{http://data.techno-science.ca}. See
 also \code{\link{ckanr_setup}} and \code{\link{get_default_url}}.}
@@ -23,15 +29,15 @@ uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to
 data to data.frame's when possible, so the result can vary from a vector, list or
 data.frame. (required)}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}} (optional)}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }
 \description{
 Show a package
 }
 \details{
 By default the help and success slots are dropped, and only the
-   result slot is returned. You can request raw json with \code{as = 'json'}
-   then parse yourself to get the help slot.
+result slot is returned. You can request raw json with \code{as = 'json'}
+then parse yourself to get the help slot.
 }
 \examples{
 \dontrun{

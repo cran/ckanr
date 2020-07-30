@@ -2,15 +2,23 @@
 % Please edit documentation in R/tag_search.R
 \name{tag_search}
 \alias{tag_search}
-\title{List tags.}
+\title{Searcn tags.}
 \usage{
-tag_search(query = NULL, vocabulary_id = NULL, offset = 0,
-  limit = 31, url = get_default_url(), key = get_default_key(),
-  as = "list", ...)
+tag_search(
+  query = NULL,
+  vocabulary_id = NULL,
+  offset = 0,
+  limit = 31,
+  url = get_default_url(),
+  key = get_default_key(),
+  as = "list",
+  ...
+)
 }
 \arguments{
 \item{query}{(character) A tag name query to search for, if given only tags
-whose names contain this string will be returned}
+whose names contain this string will be returned; one or more search
+strings}
 
 \item{vocabulary_id}{(character) The id or name of a vocabulary,
 if give only tags that belong to this vocabulary will be returned}
@@ -29,14 +37,15 @@ uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to
 data to data.frame's when possible, so the result can vary from a vector, list or
 data.frame. (required)}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}} (optional)}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }
 \description{
-List tags.
+Searcn tags.
 }
 \examples{
 \dontrun{
 tag_search(query = 'ta')
+tag_search(query = c('ta', 'al'))
 
 # different formats back
 tag_search(query = 'ta', as = 'json')

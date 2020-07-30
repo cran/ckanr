@@ -2,9 +2,9 @@
 #'
 #' @export
 #' @param q (character) Restrict the users returned to those whose names
-#'    contain a string
+#' contain a string
 #' @param order_by (character) Which field to sort the list by
-#'    (optional, default: 'name')
+#' (optional, default: 'name')
 #' @template args
 #' @template key
 #' @examples \dontrun{
@@ -22,7 +22,7 @@ user_list <- function(q = NULL, order_by = NULL, url = get_default_url(),
   key = get_default_key(), as = "list", ...) {
 
   args <- cc(list(q = q, order_by = order_by))
-  res <- ckan_GET(url, 'user_list', args, key = key, ...)
+  res <- ckan_GET(url, 'user_list', query = args, key = key, opts = list(...))
   switch(as, json = res, list = lapply(jsl(res), as.ckan_user),
     table = jsd(res))
 }

@@ -4,13 +4,22 @@
 \alias{resource_update}
 \title{Update a resource's file attachment}
 \usage{
-resource_update(id, path, url = get_default_url(),
-  key = get_default_key(), as = "list", ...)
+resource_update(
+  id,
+  path,
+  extras = list(),
+  url = get_default_url(),
+  key = get_default_key(),
+  as = "list",
+  ...
+)
 }
 \arguments{
 \item{id}{(character) Resource ID to update (required)}
 
 \item{path}{(character) Local path of the file to upload (required)}
+
+\item{extras}{(list) - the resources' extra metadata fields (optional)}
 
 \item{url}{Base url to use. Default: \url{http://data.techno-science.ca}. See
 also \code{\link{ckanr_setup}} and \code{\link{get_default_url}}.}
@@ -22,10 +31,11 @@ uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to
 data to data.frame's when possible, so the result can vary from a vector, list or
 data.frame. (required)}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}} (optional)}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }
 \value{
-The HTTP response from CKAN, formatted as list (default), table, or JSON.
+The HTTP response from CKAN, formatted as list (default), table,
+or JSON.
 }
 \description{
 This function will only update a resource's file attachment and
@@ -66,6 +76,10 @@ resource_update(xx, path=newpath)
 
 ## or from the resource id
 resource_update(xx$id, path=newpath)
+
+## optionally include extra tags
+resource_update(xx$id, path=newpath,
+                extras = list(some="metadata"))
 
 #######
 # Using default settings
@@ -108,7 +122,7 @@ browseURL(xx$url)
 dat <- readLines(path)
 dat <- sub("-111.06", "-115.06", dat)
 newpath <- tempfile(fileext = ".html")
-cat(dat, file = newpath, sep = "\\n")
+cat(dat, file = newpath, sep = "\n")
 
 # Upload modified dataset
 ## Directly from output of resource_create
@@ -117,5 +131,5 @@ browseURL(xxx$url)
 }
 }
 \references{
-\url{http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.create.resource_create}
+http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.create.resource_create
 }

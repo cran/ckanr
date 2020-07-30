@@ -25,14 +25,14 @@
 package_update <- function(x, id, url = get_default_url(),
                            key = get_default_key(), as = 'list', ...) {
 
-  id <- as.ckan_package(id, url = url)
+  id <- as.ckan_package(id, url = url, key = key)
   if (class(x) != "list") {
     stop("x must be of class list", call. = FALSE)
   }
   x$id <- id$id
   res <- ckan_POST(url, method = 'package_update',
                    body = tojun(x, TRUE), key = key,
-                   encode = "json", ctj(), ...)
+                   encode = "json", headers = ctj(), opts = list(...))
   switch(as, json = res, list = as_ck(jsl(res), "ckan_package"),
          table = jsd(res))
 }

@@ -8,7 +8,7 @@
 #' @template key
 #' @template args
 #' @references
-#' \url{http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.create.resource_create}
+#' http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.create.resource_create
 #' @details This function is deprecated - will be defunct in the next version
 #' of this package
 #' @examples \dontrun{
@@ -37,7 +37,8 @@ ds_create_dataset <- function(package_id, name, path, url = get_default_url(),
   ext <- strsplit(basename(path), "\\.")[[1]]
   ext <- ext[length(ext)]
   body <- list(package_id = package_id, name = name, format = ext,
-               url = 'upload', upload = upload_file(path))
-  res <- ckan_POST(url, method = 'resource_create', body = body, key = key, ...)
+               url = 'upload', upload = crul::upload(path))
+  res <- ckan_POST(url, method = 'resource_create', body = body, key = key,
+    opts = list(...))
   switch(as, json = res, list = jsl(res), table = jsd(res))
 }

@@ -4,8 +4,13 @@
 \alias{ds_search_sql}
 \title{Datastore - search or get a dataset from CKRAN datastore}
 \usage{
-ds_search_sql(sql, url = get_default_url(), key = get_default_key(),
-  as = "list", ...)
+ds_search_sql(
+  sql,
+  url = get_default_url(),
+  key = get_default_key(),
+  as = "list",
+  ...
+)
 }
 \arguments{
 \item{sql}{(character) A single SQL select statement. (required)}
@@ -20,7 +25,7 @@ uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to
 data to data.frame's when possible, so the result can vary from a vector, list or
 data.frame. (required)}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}} (optional)}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }
 \description{
 Datastore - search or get a dataset from CKRAN datastore

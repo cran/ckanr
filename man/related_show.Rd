@@ -4,8 +4,13 @@
 \alias{related_show}
 \title{Show a related item}
 \usage{
-related_show(id, url = get_default_url(), key = get_default_key(),
-  as = "list", ...)
+related_show(
+  id,
+  url = get_default_url(),
+  key = get_default_key(),
+  as = "list",
+  ...
+)
 }
 \arguments{
 \item{id}{(character) Related item identifier.}
@@ -20,15 +25,15 @@ uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to
 data to data.frame's when possible, so the result can vary from a vector, list or
 data.frame. (required)}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}} (optional)}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }
 \description{
 Show a related item
 }
 \details{
 By default the help and success slots are dropped, and only the
-  result slot is returned. You can request raw json with \code{as = 'json'}
-  then parse yourself to get the help slot.
+result slot is returned. You can request raw json with \code{as = 'json'}
+then parse yourself to get the help slot.
 }
 \examples{
 \dontrun{

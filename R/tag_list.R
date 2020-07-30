@@ -3,11 +3,11 @@
 #' @export
 #'
 #' @param query (character) A tag name query to search for, if given only tags
-#'    whose names contain this string will be returned
+#' whose names contain this string will be returned
 #' @param vocabulary_id (character) The id or name of a vocabulary, if given,
-#'    only tags that belong to this vocabulary will be returned
+#' only tags that belong to this vocabulary will be returned
 #' @param all_fields (logical) Return full tag dictionaries instead of
-#'    just names. Default: FALSE
+#' just names. Default: `FALSE`
 #' @template args
 #' @template key
 #' @examples \dontrun{
@@ -29,7 +29,7 @@ tag_list <- function(query = NULL, vocabulary_id = NULL, all_fields = FALSE,
 
   args <- cc(list(query = query, vocabulary_id = vocabulary_id,
                   all_fields = as_log(all_fields)))
-  res <- ckan_GET(url, 'tag_list', args, key = key, ...)
+  res <- ckan_GET(url, 'tag_list', args, key = key, opts = list(...))
   switch(as, json = res, list = lapply(jsl(res), as.ckan_tag),
     table = jsd(res))
 }

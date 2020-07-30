@@ -6,20 +6,22 @@
 #' are not updated.
 #'
 #' The new file must exist on a local path. R objects have to be written to a
-#' file, e.g. using \code{tempfile()} - see example.
+#' file, e.g. using `tempfile()` - see example.
 #'
 #' For convenience, CKAN base url and API key default to the global options,
-#' which are set by \code{ckanr_setup}.
+#' which are set by `ckanr_setup`.
 #'
 #' @export
 #'
 #' @param id (character) Resource ID to update (required)
 #' @param path (character) Local path of the file to upload (required)
+#' @param extras (list) - the resources' extra metadata fields (optional)
 #' @template key
 #' @template args
-#' @return The HTTP response from CKAN, formatted as list (default), table, or JSON.
+#' @return The HTTP response from CKAN, formatted as list (default), table,
+#' or JSON.
 #' @references
-#' \url{http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.create.resource_create}
+#' http://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.create.resource_create
 #' @examples \dontrun{
 #' ckanr_setup(url = "https://demo.ckan.org/", key = getOption("ckan_demo_key"))
 #'
@@ -47,6 +49,10 @@
 #'
 #' ## or from the resource id
 #' resource_update(xx$id, path=newpath)
+#'
+#' ## optionally include extra tags
+#' resource_update(xx$id, path=newpath,
+#'                 extras = list(some="metadata"))
 #'
 #' #######
 #' # Using default settings
@@ -96,18 +102,22 @@
 #' (xxx <- resource_update(xx, path=newpath))
 #' browseURL(xxx$url)
 #' }
-resource_update <- function(id, path, url = get_default_url(),
-  key = get_default_key(), as = 'list', ...) {
+resource_update <- function(id, path, extras = list(),
+  url = get_default_url(), key = get_default_key(),
+  as = 'list', ...) {
 
+  assert(extras, "list")
   id <- as.ckan_resource(id, url = url)
   path <- path.expand(path)
-  up <- upload_file(path)
+  up <- upfile(path)
   format <- pick_type(up$type)
   body <- list(id = id$id, format = format, upload = up,
     last_modified =
       format(Sys.time(), tz = "UTC", format = "%Y-%m-%d %H:%M:%OS6"),
     url = "update")
-  res <- ckan_POST(url, 'resource_update', body = body, key = key, ...)
+  body <- c(body, extras)
+  res <- ckan_POST(url, 'resource_update', body = body, key = key,
+    opts = list(...))
   switch(as, json = res, list = as_ck(jsl(res), "ckan_resource"),
          table = jsd(res))
 }

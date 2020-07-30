@@ -1,6 +1,7 @@
 context("organization_show")
 
 skip_on_cran()
+skip_on_ci()
 
 u <- get_test_url()
 o <- get_test_oid()
@@ -9,14 +10,14 @@ dataset_num <- local({
   check_ckan(u)
   chorg <- tryCatch(check_organization(u, o), error = function(e) e)
   if (inherits(chorg, "error")) {
-    ckanr_setup(u, key = getOption("ckan_demo_key"))
+    ckanr_setup(u, key = Sys.getenv("TEST_API_KEY", ""))
     organization_create(o)
   }
   Sys.sleep(2)
   org <- organization_show(o, url=u)
-  res <- httr::GET(file.path(u, "organization", org$name))
-  httr::stop_for_status(res)
-  html <- httr::content(res, as = "text")
+  res <- crul::HttpClient$new(file.path(u, "organization", org$name))$get()
+  res$raise_for_status()
+  html <- res$parse("UTF-8")
   tmp <- regmatches(html, regexec("(\\d+) datasets? found", html))
   as.integer(tmp[[1]][2])
 })

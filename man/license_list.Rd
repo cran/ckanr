@@ -4,8 +4,13 @@
 \alias{license_list}
 \title{Return the list of licenses available for datasets on the site.}
 \usage{
-license_list(id, url = get_default_url(), key = get_default_key(),
-  as = "list", ...)
+license_list(
+  id,
+  url = get_default_url(),
+  key = get_default_key(),
+  as = "list",
+  ...
+)
 }
 \arguments{
 \item{id}{(character) Package identifier.}
@@ -20,7 +25,7 @@ uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to
 data to data.frame's when possible, so the result can vary from a vector, list or
 data.frame. (required)}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}} (optional)}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }
 \description{
 Return the list of licenses available for datasets on the site.

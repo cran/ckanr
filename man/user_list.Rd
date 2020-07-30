@@ -4,8 +4,14 @@
 \alias{user_list}
 \title{Return a list of the site's user accounts.}
 \usage{
-user_list(q = NULL, order_by = NULL, url = get_default_url(),
-  key = get_default_key(), as = "list", ...)
+user_list(
+  q = NULL,
+  order_by = NULL,
+  url = get_default_url(),
+  key = get_default_key(),
+  as = "list",
+  ...
+)
 }
 \arguments{
 \item{q}{(character) Restrict the users returned to those whose names
@@ -24,7 +30,7 @@ uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to
 data to data.frame's when possible, so the result can vary from a vector, list or
 data.frame. (required)}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}} (optional)}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }
 \description{
 Return a list of the site's user accounts.

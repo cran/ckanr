@@ -4,9 +4,16 @@
 \alias{user_show}
 \title{Show a user.}
 \usage{
-user_show(id, user_obj = NULL, include_datasets = FALSE,
-  include_num_followers = FALSE, url = get_default_url(),
-  key = get_default_key(), as = "list", ...)
+user_show(
+  id,
+  user_obj = NULL,
+  include_datasets = FALSE,
+  include_num_followers = FALSE,
+  url = get_default_url(),
+  key = get_default_key(),
+  as = "list",
+  ...
+)
 }
 \arguments{
 \item{id}{(character) Package identifier.}
@@ -14,11 +21,11 @@ user_show(id, user_obj = NULL, include_datasets = FALSE,
 \item{user_obj}{(user dictionary) The user dictionary of the user (optional)}
 
 \item{include_datasets}{(logical) Include a list of datasets the user has
-created. If it is the same user or a sysadmin requesting, it includes datasets that
-are draft or private. (optional, default:False, limit:50)}
+created. If it is the same user or a sysadmin requesting, it includes
+datasets that are draft or private. (optional, default:False, limit:50)}
 
-\item{include_num_followers}{(logical) Include the number of followers the user
-has (optional, default:False)}
+\item{include_num_followers}{(logical) Include the number of followers
+the user has (optional, default:False)}
 
 \item{url}{Base url to use. Default: \url{http://data.techno-science.ca}. See
 also \code{\link{ckanr_setup}} and \code{\link{get_default_url}}.}
@@ -30,7 +37,7 @@ uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to
 data to data.frame's when possible, so the result can vary from a vector, list or
 data.frame. (required)}
 
-\item{...}{Curl args passed on to \code{\link[httr]{POST}} (optional)}
+\item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }
 \description{
 Show a user.
