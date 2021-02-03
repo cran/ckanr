@@ -24,6 +24,7 @@ resource_create(
   webstore_last_updated = NULL,
   upload = NULL,
   extras = NULL,
+  http_method = "GET",
   url = get_default_url(),
   key = get_default_key(),
   as = "list",
@@ -70,15 +71,19 @@ added to. This should be an alphanumeric string. Required.}
 
 \item{extras}{(list) - the resources' extra metadata fields (optional)}
 
-\item{url}{Base url to use. Default: \url{http://data.techno-science.ca}. See
+\item{http_method}{(character) which HTTP method (verb) to use; one of
+"GET" or "POST". Default: "GET"}
+
+\item{url}{Base url to use. Default: https://data.ontario.ca/ See
 also \code{\link{ckanr_setup}} and \code{\link{get_default_url}}.}
 
-\item{key}{A privileged CKAN API key, Default: your key set with \code{\link{ckanr_setup}}}
+\item{key}{A privileged CKAN API key, Default: your key set with
+\code{\link{ckanr_setup}}}
 
-\item{as}{(character) One of list (default), table, or json. Parsing with table option
-uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to parse
-data to data.frame's when possible, so the result can vary from a vector, list or
-data.frame. (required)}
+\item{as}{(character) One of list (default), table, or json. Parsing with
+table option uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)},
+which attempts to parse data to data.frame's when possible, so the result
+can vary from a vector, list or data.frame. (required)}
 
 \item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }

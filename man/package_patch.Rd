@@ -8,6 +8,7 @@ package_patch(
   x,
   id = NULL,
   extras = NULL,
+  http_method = "GET",
   key = get_default_key(),
   url = get_default_url(),
   as = "list",
@@ -25,15 +26,19 @@ x does not have an "id" field)}
 added to datasets, each extra dictionary should have keys 'key' (a string),
 'value' (a string)}
 
-\item{key}{A privileged CKAN API key, Default: your key set with \code{\link{ckanr_setup}}}
+\item{http_method}{(character) which HTTP method (verb) to use; one of
+"GET" or "POST". Default: "GET"}
 
-\item{url}{Base url to use. Default: \url{http://data.techno-science.ca}. See
+\item{key}{A privileged CKAN API key, Default: your key set with
+\code{\link{ckanr_setup}}}
+
+\item{url}{Base url to use. Default: https://data.ontario.ca/ See
 also \code{\link{ckanr_setup}} and \code{\link{get_default_url}}.}
 
-\item{as}{(character) One of list (default), table, or json. Parsing with table option
-uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)}, which attempts to parse
-data to data.frame's when possible, so the result can vary from a vector, list or
-data.frame. (required)}
+\item{as}{(character) One of list (default), table, or json. Parsing with
+table option uses \code{jsonlite::fromJSON(..., simplifyDataFrame = TRUE)},
+which attempts to parse data to data.frame's when possible, so the result
+can vary from a vector, list or data.frame. (required)}
 
 \item{...}{Curl args passed on to \code{\link[crul]{verb-POST}} (optional)}
 }
