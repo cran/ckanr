@@ -1,9 +1,8 @@
-#' @title Update a resource's file attachment
+#' @title Update a resource
 #'
-#'
-#' @description This function will only update a resource's file attachment and
-#' the metadata key "last_updated". Other metadata, such as name or description,
-#' are not updated.
+#' @description This function can be used to update a resource's file attachment
+#' and "extra" metadata fields. Any update will also set the metadata key 
+#' "last_updated". Other metadata, such as name or description, are not updated.
 #'
 #' The new file must exist on a local path. R objects have to be written to a
 #' file, e.g. using `tempfile()` - see example.
@@ -14,7 +13,7 @@
 #' @export
 #'
 #' @param id (character) Resource ID to update (required)
-#' @param path (character) Local path of the file to upload (required)
+#' @param path (character) Local path of the file to upload (optional)
 #' @param extras (list) - the resources' extra metadata fields (optional)
 #' @template key
 #' @template args
@@ -53,6 +52,14 @@
 #' ## optionally include extra tags
 #' resource_update(xx$id, path=newpath,
 #'                 extras = list(some="metadata"))
+#'                 
+#' # Update a resource's extra tags
+#' ## add extra tags without uploading a new file
+#' resource_update(id,
+#'                 extras = list(some="metadata"))
+#'
+#' ## or remove all extra tags
+#' resource_update(id, extras = list())                 
 #'
 #' #######
 #' # Using default settings
@@ -102,20 +109,26 @@
 #' (xxx <- resource_update(xx, path=newpath))
 #' browseURL(xxx$url)
 #' }
-resource_update <- function(id, path, extras = list(),
+resource_update <- function(id, path = NULL, extras = list(),
   url = get_default_url(), key = get_default_key(),
   as = 'list', ...) {
 
   assert(extras, "list")
   id <- as.ckan_resource(id, url = url)
-  path <- path.expand(path)
-  up <- upfile(path)
-  format <- pick_type(up$type)
-  body <- list(id = id$id, format = format, upload = up,
+  if (is.character(path)) {
+    path <- path.expand(path)
+    up <- upfile(path)
+    format <- pick_type(up$type)
+    body <- list(format = format, upload = up)
+  } else {
+    body <- list()
+  }
+  default_body = list(id = id$id,
     last_modified =
       format(Sys.time(), tz = "UTC", format = "%Y-%m-%d %H:%M:%OS6"),
-    url = "update")
-  body <- c(body, extras)
+    url = "update"
+  )
+  body <- c(default_body, body, extras)
   res <- ckan_POST(url, 'resource_update', body = body, key = key,
     opts = list(...))
   switch(as, json = res, list = as_ck(jsl(res), "ckan_resource"),
